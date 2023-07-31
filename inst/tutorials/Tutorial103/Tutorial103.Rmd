@@ -1,0 +1,312 @@
+---
+title: "**ANÁLISIS DE CORRESPON- DENCIA**"
+author: Modelos Estadística para la toma de decisiones
+output: 
+  learnr::tutorial:
+    css: css/learnr_metadocencia.css
+    progressive: true # los encabezados de tercer nivel (###) son revelados progresivamente
+    allow_skip: true # permite saltearse los ejercicios. 
+    language:
+      es: tutorial_es.json
+description: "Tutorial interactivo conceptos básicos del análisis multivariado de datos" # Esta descripción se ve en el panel Tutorial de RStudio 
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = NA)
+library(learnr)
+library(ggplot2)
+knitr::opts_chunk$set(echo = FALSE,
+                 exercise.warn_invisible = FALSE)
+# colores
+c1="#FF7F00" # NARANJA COLOR PRINCIPAL
+c2="#034a94" # AZUL FUERTE COLOR SECUNDARIO  
+c3="#0eb0c6" # AZUL CLARO COLOR TERCEARIO  
+c4="#686868" # GRIS COLOR TEXTO 
+#library(PerformanceAnalytics)
+#library(patchwork)
+#-----------------------------------------------
+##  <div class="content-box-blue">    </div> ## caja azul
+```
+
+## **PRESENTACIÓN**
+
+```{r, echo=FALSE, out.width="100%", fig.align = "center"}
+knitr::include_graphics("images/modulo1.png")
+`````
+
+El presente tutorial contiene preguntas relacionadas con  el análisis de correspondencia. A continuación se presentan un resumen  con los principales conceptos:
+
+</br>
+
+### **CONCEPTOS**
+
+El análisis de correspondencia (AC) es una técnica estadística utilizada para explorar las relaciones entre variables categóricas en un conjunto de datos. Aquí están los principales conceptos asociados con el análisis de correspondencia:
+
+</br>
+
+#### **Datos categóricos**: 
+
+El análisis de correspondencia se aplica a conjuntos de datos que contienen variables categóricas, es decir, variables que representan categorías o grupos en lugar de valores numéricos.
+
+</br>
+
+####  **Tabla de contingencia**: 
+
+Es una tabla que muestra la frecuencia de aparición conjunta de las categorías de dos o más variables categóricas. Es el punto de partida para realizar el análisis de correspondencia.
+
+</br>
+
+#### **Representación gráfica**: 
+
+El análisis de correspondencia busca representar las relaciones entre las categorías de las variables categóricas en un espacio de baja dimensión. Las técnicas de visualización incluyen gráficos de coordenadas, gráficos de contribuciones y gráficos de barras.
+
+</br>
+
+#### **Inercia**: 
+
+La inercia en el análisis de correspondencia mide la varianza total explicada por el número de dimensiones retenidas en el análisis. La inercia ayuda a seleccionar el número adecuado de dimensiones para retener.
+
+</br>
+
+#### **Componentes de fila y columna**: 
+
+En el análisis de correspondencia, las filas y columnas de la tabla de contingencia tienen componentes asociadas. Estas componentes describen la relación entre las filas y columnas en el espacio de dimensiones reducidas.
+
+</br>
+
+#### **Independencia**: 
+
+Si las variables categóricas son independientes, significa que no hay relación significativa entre ellas. El análisis de correspondencia puede ayudar a identificar si hay asociación entre las categorías de diferentes variables.
+
+</br>
+
+#### **Chi-cuadrado**: 
+
+En el análisis de correspondencia, se utiliza la prueba de chi-cuadrado para determinar si la asociación entre las variables categóricas es significativa o simplemente el resultado del azar.
+
+</br>
+
+#### **Análisis de correspondencia múltiple (ACM)**: 
+
+Es una extensión del análisis de correspondencia que permite estudiar la asociación entre múltiples tablas de contingencia. Es útil cuando se desean comparar relaciones entre diferentes conjuntos de datos.
+
+</br>
+
+#### **Imputación**: 
+
+En el análisis de correspondencia, se puede realizar la imputación de datos faltantes utilizando diversas técnicas, como imputación por media, mediana o moda, para mantener la integridad del análisis.
+
+</br>
+
+####  **Aplicaciones**: 
+
+El análisis de correspondencia es ampliamente utilizado en diversas áreas, como ciencias sociales, marketing, biología, lingüística y muchas otras disciplinas donde se analizan datos categóricos para identificar patrones y relaciones.
+
+En resumen, el análisis de correspondencia es una técnica valiosa para explorar y visualizar relaciones entre variables categóricas en un conjunto de datos, proporcionando una herramienta útil para la interpretación y el análisis de datos no numéricos.
+
+</br>
+
+### **Pregunta 1**
+
+```{r quiz_1}
+
+quiz(
+question("¿Qué tipo de datos es adecuado para el análisis de correspondencia?",
+correct = "b) Tablas de contingencia",
+allow_retry = TRUE,
+answer("a) Datos numéricos continuos", message = "No...inténtalo de nuevo!"),
+answer("b) Tablas de contingencia", correct = TRUE),
+answer("c) Datos de texto sin estructura", message = "Incorrecto. Intenta de nuevo!"),
+answer("d) Datos de series temporales", message = "Nop...inténtalo de nuevo!"),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+```
+
+### **Pregunta 2**
+
+```{r quiz_2}
+
+quiz(
+question("¿Qué objetivo principal tiene el análisis de correspondencia?",
+correct = "a) Explorar relaciones entre variables categóricas",
+allow_retry = TRUE,
+answer("a) Explorar relaciones entre variables categóricas", correct = TRUE),
+answer("b) Reducir la dimensión de los datos", message = "No...inténtalo de nuevo!"),
+answer("c) Predecir valores continuos", message = "Incorrecto. Intenta de nuevo!"),
+answer("d) Agrupar objetos similares en clústeres", message = "Nop...inténtalo de nuevo!"),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+
+```
+
+### **Pregunta 3**
+
+```{r quiz_3}
+
+quiz(
+question("¿Cuál de las siguientes afirmaciones es cierta acerca del análisis de correspondencia?",
+correct = "c) Es una técnica no supervisada",
+allow_retry = TRUE,
+answer("a) Requiere de una variable respuesta", message = "No...inténtalo de nuevo!"),
+answer("b) Solo puede manejar dos variables categóricas", message = "Nop...inténtalo de nuevo!"),
+answer("c) Es una técnica no supervisada", correct = TRUE),
+answer("d) No se ve afectado por la cantidad de datos faltantes", message = "Incorrecto. Intenta de nuevo!"),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+```
+
+### **Pregunta 4**
+
+```{r quiz_4}
+
+quiz(
+question("¿Cuál de las siguientes afirmaciones es cierta sobre el análisis de correspondencia múltiple?",
+correct = "b) Permite el estudio de la asociación entre múltiples tablas de contingencia",
+allow_retry = TRUE,
+answer("a) Solo es útil para tablas de contingencia con dos variables categóricas", message = "No...inténtalo de nuevo!"),
+answer("b) Permite el estudio de la asociación entre múltiples tablas de contingencia", correct = TRUE),
+answer("c) Requiere de una variable respuesta", message = "Incorrecto. Intenta de nuevo!"),
+answer("d) Es un tipo de análisis de correspondencia específico para datos faltantes", message = "Nop...inténtalo de nuevo!"),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+
+  caption = "  "
+)
+
+
+```
+
+
+### **Pregunta 5**
+
+```{r quiz_5}
+
+quiz(
+question("¿Cuál de los siguientes gráficos se utiliza para visualizar el análisis de correspondencia?",
+correct = "a) Gráfico de coordenadas",
+allow_retry = TRUE,
+answer("a) Gráfico de coordenadas", correct = TRUE),
+answer("b) Gráfico de dispersión", message = "No...inténtalo de nuevo!"),
+answer("c) Gráfico de barras", message = "Incorrecto. Intenta de nuevo!"),
+answer("d) Gráfico de líneas", message = "Nop...inténtalo de nuevo!"),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+
+```
+
+
+### **Pregunta 6**
+
+```{r quiz_6}
+
+quiz(
+question("¿Cuál de los siguientes métodos de análisis de correspondencia puede manejar datos faltantes?",
+correct = "c) Análisis de correspondencia múltiple",
+allow_retry = TRUE,
+answer("a) Análisis de correspondencia simple", message = "No...inténtalo de nuevo!"),
+answer("b) Análisis de correspondencia específico", message = "Nop...inténtalo de nuevo!"),
+answer("c) Análisis de correspondencia múltiple", correct = TRUE),
+answer("d) Análisis de correspondencia ordinal", message = "Incorrecto. Intenta de nuevo!"),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+
+```
+
+
+### **Pregunta 7**
+
+```{r quiz_7}
+
+quiz(
+question("¿Cuál de las siguientes métricas se utiliza para evaluar la calidad del ajuste en el análisis de correspondencia?",
+correct = "d) Inercia",
+allow_retry = TRUE,
+answer("a) Entropía", message = "No...inténtalo de nuevo!"),
+answer("b) Ajuste de Rand", message = "Nop...inténtalo de nuevo!"),
+answer("c) Información Mutua Normalizada", message = "Incorrecto. Intenta de nuevo!"),
+answer("d) Inercia", correct = TRUE),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+
+```
+
+### **Pregunta 8**
+
+```{r quiz_8}
+
+quiz(
+question("¿Cuál de las siguientes afirmaciones es cierta sobre las coordenadas del análisis de correspondencia?",
+correct = "a) Representan las relaciones entre filas y columnas en un espacio de baja dimensión",
+allow_retry = TRUE,
+answer("a) Representan las relaciones entre filas y columnas en un espacio de baja dimensión", correct = TRUE),
+answer("b) Representan las variables numéricas originales", message = "No...inténtalo de nuevo!"),
+answer("c) Representan las filas en un espacio de alta dimensión", message = "Incorrecto. Intenta de nuevo!"),
+answer("d) Representan las relaciones entre variables categóricas en un espacio de alta dimensión", message = "Nop...inténtalo de nuevo!"),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+
+```
+
+### **Pregunta 9**
+
+```{r quiz_9}
+
+quiz(
+   question("¿Qué técnica se utiliza para reducir la dimensión del análisis de correspondencia?",
+correct = "b) Análisis de componentes principales para tablas de contingencia",
+allow_retry = TRUE,
+answer("a) Análisis de componentes principales para datos numéricos", message = "No...inténtalo de nuevo!"),
+answer("b) Análisis de componentes principales para tablas de contingencia", correct = TRUE),
+answer("c) Análisis de conglomerados para datos categóricos", message = "Incorrecto. Intenta de nuevo!"),
+answer("d) Análisis de conglomerados para datos numéricos", message = "Nop...inténtalo de nuevo!"),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+
+```
+
+
+### **Pregunta 10**
+
+```{r quiz_10}
+
+quiz(
+question("¿Qué índice se utiliza para medir la asociación entre dos variables categóricas en el análisis de correspondencia?",
+correct = "b) Coeficiente de contingencia",
+allow_retry = TRUE,
+answer("a) Coeficiente de correlación de Pearson", message = "No...inténtalo de nuevo!"),
+answer("b) Coeficiente de contingencia", correct = TRUE),
+answer("c) Coeficiente de determinación", message = "Incorrecto. Intenta de nuevo!"),
+answer("d) Coeficiente de Spearman", message = "Nop...inténtalo de nuevo!"),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+
+```
+

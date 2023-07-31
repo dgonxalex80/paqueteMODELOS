@@ -1,0 +1,315 @@
+---
+title: "**ANÁLISIS DE CONGLOME- RADOS**"
+author: Modelos Estadística para la toma de decisiones
+output: 
+  learnr::tutorial:
+    css: css/learnr_metadocencia.css
+    progressive: true # los encabezados de tercer nivel (###) son revelados progresivamente
+    allow_skip: true # permite saltearse los ejercicios. 
+    language:
+      es: tutorial_es.json
+description: "Tutorial interactivo conceptos básicos de probabilidad" # Esta descripción se ve en el panel Tutorial de RStudio 
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+knitr::opts_chunk$set(echo = FALSE,
+                 exercise.warn_invisible = FALSE)
+# colores
+c1="#FF7F00" # NARANJA COLOR PRINCIPAL
+c2="#034a94" # AZUL FUERTE COLOR SECUNDARIO  
+c3="#0eb0c6" # AZUL CLARO COLOR TERCEARIO  
+c4="#686868" # GRIS COLOR TEXTO 
+##  <div class="content-box-blue">    </div> ## caja azul
+```
+
+</br>
+
+## **PRESENTACIÓN**
+
+```{r, echo=FALSE, out.width="100%", fig.align = "center"}
+knitr::include_graphics("images/modulo1.png")
+```
+
+El presente tutorial contiene preguntas relacionadas con análisis de conglomerados, sus  conceptos más importantes que se plantean para alcanzar los objetivos planteados en esta unidad 
+
+</br></br>
+  
+### **CONCEPTOS**
+
+</br>
+
+El análisis de conglomerados o clústeres, también conocido como agrupamiento o clustering, es una técnica de aprendizaje no supervisado utilizada para agrupar objetos similares en conjuntos o clústeres. A continuación, se presentan los principales conceptos asociados con el análisis de clústeres:
+
+</br>
+
+#### **Aprendizaje no supervisado**: 
+
+El análisis de clústeres es una forma de aprendizaje no supervisado, lo que significa que no se proporcionan etiquetas o categorías para los datos de antemano. El algoritmo busca patrones o similitudes dentro de los datos sin guía externa.
+
+</br>
+
+#### **Objetos o muestras**: 
+
+Son las unidades individuales de datos en el conjunto de datos. Pueden ser puntos en un espacio n-dimensional o registros en una base de datos.
+
+</br>
+
+#### **Características o variables**: 
+
+Son las diferentes dimensiones o atributos que describen a cada objeto o muestra en el conjunto de datos. Por ejemplo, en un conjunto de datos de clientes, las características podrían ser la edad, el ingreso y la ubicación.
+
+</br>
+
+#### **Distancia o similitud**: 
+
+La medida de distancia o similitud entre dos objetos es fundamental en el análisis de clústeres. Puede ser euclidiana, de Manhattan, de correlación, etc. La elección de la distancia afecta cómo los objetos se agrupan en clústeres.
+
+</br>
+
+#### **Clústeres**: 
+
+Son grupos o conjuntos de objetos que son más similares entre sí que con los objetos en otros clústeres. El objetivo del análisis de clústeres es formar clústeres que sean homogéneos internamente y diferentes entre sí.
+
+</br>
+
+####  **Algoritmos de clústering**: 
+
+Son los métodos y procedimientos utilizados para realizar el análisis de clústeres. Algunos ejemplos populares incluyen K-Means, DBSCAN, Aglomerativo, y Mean Shift.
+
+</br>
+
+####  **Centroide**: 
+
+En el caso del algoritmo K-Means, un clúster está representado por su centroide, que es el punto medio del clúster. Los objetos se asignan al clúster con el centroide más cercano.
+
+* **K-Means**: Agrupa datos en K clústeres al encontrar centroides y asignar puntos al clúster más cercano.Es eficiente y fácil de implementar. Es adecuado para conjuntos de datos grandes.
+* **DBSCAN**: Identifica clústeres basados en la densidad de puntos cercanos, detectando también puntos de ruido. Puede manejar clústeres de diferentes formas y tamaños. No requiere especificar el número de clústeres previamente.
+* **Aglomerativo**: Es un enfoque jerárquico que fusiona clústeres cercanos de manera iterativa. Proporciona una estructura jerárquica de los clústeres, lo que permite visualizar diferentes niveles de agrupación.
+* **Mean Shift**: Encuentra los modos o máximos locales de la densidad de probabilidad para formar clústeres. No requiere especificar previamente el número de clústeres. Es adecuado para datos con formas irregulares o no esféricas.
+
+</br>
+
+####  **Dendrograma**: 
+
+Es una representación gráfica de los resultados del análisis de clúster jerárquico. Muestra cómo los objetos se agrupan en clústeres en diferentes niveles de similitud.
+
+</br>
+
+####  **Métricas de validación**: 
+
+Son medidas utilizadas para evaluar la calidad de los clústeres obtenidos. Algunas métricas comunes incluyen el índice de Silueta, la medida de Dunn, el índice Davies-Bouldin, entre otros.
+
+</br>
+
+#### **Índice de silueta**:
+
+Es una métrica que evalúa la calidad de los clústeres en el análisis de clustering. Varía entre -1 y 1, donde valores cercanos a 1 indican una buena separación entre clústeres, valores cercanos a 0 señalan ambigüedad y valores cercanos a -1 indican una mala asignación de objetos a clústeres. Es útil para comparar diferentes configuraciones de clústeres y tomar decisiones informadas sobre el número óptimo de clústeres.
+
+#### **Aplicaciones**: 
+
+El análisis de clústeres se aplica en diversas áreas, como segmentación de clientes, clasificación de imágenes, análisis de redes sociales, agrupación de documentos y detección de anomalías, entre otros.
+
+Es importante destacar que el análisis de clústeres puede ser un proceso exploratorio que ayuda a comprender la estructura subyacente de los datos y generar conocimiento útil en diversas áreas de estudio.
+
+</br></br>
+
+
+## **CUESTIONARIO**
+
+### **Pregunta 1**
+
+```{r quiz_1}
+
+quiz(
+question("¿Qué objetivo principal tiene el análisis de clustering?", 
+correct = "Correcto!, (c) Agrupar objetos similares en clústeres.",
+allow_retry = TRUE,
+answer("a) Reducir la dimensión de los datos.", message = "No...inténtalo de nuevo!"),
+answer("b) Predecir valores continuos.", message = "No...inténtalo de nuevo!"),
+answer("c) Agrupar objetos similares en clústeres.", correct = TRUE),
+answer("d) Realizar una proyección de los datos en un espacio de menor dimensión.", message = "Incorrecto. Intenta de nuevo!"),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+```
+
+### **Pregunta 2**
+
+```{r quiz_2}
+
+quiz(
+question("¿Cuál de las siguientes afirmaciones sobre el análisis de clustering es cierta?",
+correct = "Correcto!, (b) Es un método de aprendizaje no supervisado.",
+allow_retry = TRUE,
+answer("a) Requiere etiquetas previas para los datos.", message = "No...inténtalo de nuevo!"),
+answer("b) Es un método de aprendizaje supervisado.", correct = TRUE),
+answer("c) Solo puede manejar variables numéricas.", message = "Incorrecto. Intenta de nuevo!"),
+answer("d) No se ve afectado por la elección de la métrica de distancia.", message = "No...inténtalo de nuevo!"),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+
+```
+
+### **Pregunta 3**
+
+```{r quiz_3}
+quiz(
+question("¿Cuál de los siguientes métodos de clustering es jerárquico?",
+correct = "d) Aglomerativo",
+allow_retry = TRUE,
+answer("a) K-Means", message = "No...inténtalo de nuevo!"),
+answer("b) DBSCAN", message = "No...inténtalo de nuevo!"),
+answer("c) K-Medoids", message = "Incorrecto. Intenta de nuevo!"),
+answer("d) Aglomerativo", correct = TRUE),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+```
+
+### **Pregunta 4**
+
+```{r quiz_4}
+quiz(
+question("¿Qué método de clustering requiere que se especifique el número de clústeres de antemano?",
+correct = "a) K-Means",
+allow_retry = TRUE,
+answer("a) K-Means", correct = TRUE),
+answer("b) DBSCAN", message = "No...inténtalo de nuevo!"),
+answer("c) Aglomerativo", message = "Incorrecto. Intenta de nuevo!"),
+answer("d) K-Medoids", message = "No...inténtalo de nuevo!"),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+
+```
+
+
+### **Pregunta 5**
+
+```{r quiz_5}
+
+quiz(
+question("¿Qué método de clustering es más adecuado para manejar conjuntos de datos con diferentes tamaños y densidades de clústeres?",
+correct = "Correcto!, (b) DBSCAN",
+allow_retry = TRUE,
+answer("a) K-Means", message = "No...inténtalo de nuevo!"),
+answer("b) DBSCAN", correct = TRUE),
+answer("c) K-Medoids", message = "Incorrecto. Intenta de nuevo!"),
+answer("d) Aglomerativo", message = "Nop...inténtalo de nuevo!"),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+
+```
+
+
+### **Pregunta 6**
+
+```{r quiz_6}
+quiz(
+question("¿Cuál de los siguientes índices de validación interna se utiliza para evaluar la calidad de los clústeres?",
+correct = "Correcto!, (c) Silueta",
+allow_retry = TRUE,
+answer("a) Ajuste de Rand", message = "No...inténtalo de nuevo!"),
+answer("b) Información Mutua Normalizada", message = "No...inténtalo de nuevo!"),
+answer("c) Silueta", correct = TRUE),
+answer("d) Entropía", message = "Incorrecto. Intenta de nuevo!"),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+
+```
+
+
+### **Pregunta 7**
+
+```{r quiz_7}
+quiz(
+question("¿Qué método de clustering puede asignar muestras a ruido o no asignarlas a ningún clúster?",
+correct = "Correcto!, (b) DBSCAN",
+allow_retry = TRUE,
+answer("a) K-Means", message = "No...inténtalo de nuevo!"),
+answer("b) DBSCAN", correct = TRUE),
+answer("c) K-Medoids", message = "Incorrecto. Intenta de nuevo!"),
+answer("d) Aglomerativo", message = "No...inténtalo de nuevo!"),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+
+```
+
+### **Pregunta 8**
+
+```{r quiz_8}
+quiz(
+question("¿Qué método de clustering es más adecuado para encontrar clústeres de forma no convexa?",
+correct = "Correcto!, (c) DBSCAN",
+allow_retry = TRUE,
+answer("a) K-Means", message = "No...inténtalo de nuevo!"),
+answer("b) Aglomerativo", message = "No...inténtalo de nuevo!"),
+answer("c) DBSCAN", correct = TRUE),
+answer("d) K-Medoids", message = "Incorrecto. Intenta de nuevo!"),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+
+```
+
+### **Pregunta 9**
+
+```{r quiz_9}
+quiz(
+question("¿Cuál de los siguientes métodos de clustering es más sensible a la inicialización o selección de un punto inicial para iniciar el algoritmo?",
+correct = "Correcto!, (a) K-Means",
+allow_retry = TRUE,
+answer("a) K-Means", correct = TRUE),
+answer("b) DBSCAN", message = "No...inténtalo de nuevo!"),
+answer("c) Aglomerativo", message = "Incorrecto. Intenta de nuevo!"),
+answer("d) K-Medoids", message = "No...inténtalo de nuevo!"),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+
+```
+
+
+### **Pregunta 10**
+
+```{r quiz_10}
+quiz(
+question("¿Cuál de las siguientes técnicas se puede utilizar para determinar el número óptimo de clústeres?",
+correct = "Correcto!, (d) Análisis de codo",
+allow_retry = TRUE,
+answer("a) Análisis de silueta", message = "No...inténtalo de nuevo!"),
+answer("b) Índice de Davies-Bouldin", message = "No...inténtalo de nuevo!"),
+answer("c) Entropía", message = "Incorrecto. Intenta de nuevo!"),
+answer("d) Análisis de codo", correct = TRUE),
+submit_button = "Enviar respuesta",
+try_again_button = "Intentar de nuevo"),
+  caption = "  "
+)
+
+
+```
+
