@@ -1,0 +1,792 @@
+---
+title: "**ESTIMACION DE MODELO DE REGRESIÓN LINEAL MULTIPLE**"
+author: Modelos Estadística para la toma de decisiones
+output: 
+  learnr::tutorial:
+    css: css/learnr_metadocencia.css
+    progressive: true # los encabezados de tercer nivel (###) son revelados progresivamente
+    allow_skip: true # permite saltearse los ejercicios. 
+    language:
+      es: tutorial_es.json
+description: "Tutorial interactivo conceptos básicos de probabilidad" # Esta descripción se ve en el panel Tutorial de RStudio 
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(paqueteMODELOS)
+library(boot)
+library(ggplot2)
+library(gridExtra)
+library(knitr)
+library(broom)
+library(stargazer)
+
+knitr::opts_chunk$set(echo = FALSE,
+                 exercise.warn_invisible = FALSE)
+# colores
+c1="#FF7F00" # NARANJA COLOR PRINCIPAL
+c2="#034a94" # AZUL FUERTE COLOR SECUNDARIO  
+c3="#0eb0c6" # AZUL CLARO COLOR TERCEARIO  
+c4="#686868" # GRIS COLOR TEXTO 
+##  <div class="content-box-blue">    </div> ## caja azul
+```
+
+## **PRESENTACIÓN**
+
+```{r, echo=FALSE, out.width="100%", fig.align = "center"}
+knitr::include_graphics("images/modulo1.png")
+```
+
+
+El presente tutorial contiene preguntas relacionadas con l estimación del modelo y sus supuestos, conceptos importante para la compresión los proceso relacionados con la inferencia realizada sobre los resultados obtenidos por el método de MCO.   
+
+</br>
+  
+#### **CONCEPTOS**
+  
+#### **Método de estimación MCO** 
+
+Método de optimización matemático que permite encontrar como solución los valores de los coeficientes del modelo de regresión múltiple  que minimizan la suma de cuadrados de los errores. En forma matricial es:
+
+$$\widehat{\beta} = (X′X)^{-1} X′y$$
+
+#### **Propiedades de los estimadores MCO**
+
+Los estimadores de los coeficientes se distribuyen normal, con un vector de medias $\beta$ y matriz de varianzas-covarianzas $\sigma^{2} (X′X)^{−1}$.
+
+
+$$\widehat{\beta} \sim N \Big( \beta ,\sigma^{2} (X′X)^{−1} \Big)$$
+Esto implica que los estimadores $\widehat{\beta_{i}}$ son:
+
+* Insesgados
+* Eficientes 
+* Se distribuyen normal
+
+#### **Inferencia sobre los coeficientes**
+
+Si los $\widehat{\beta}_{i}$ se distribuyen normal, entonces:
+
+$$
+{T_j} = {\frac{\widehat\beta_j - \beta_j}{\text{se}\left(\widehat\beta_j\right)} \sim t_{n - p}}, \hspace{1cm} j = 0, 1, \ldots, k
+$$
+y 
+
+El intervalo de confianza para $\beta_{i}$ esta dado por :
+
+$$
+\widehat\beta_j \pm t_{\alpha/2, n - p}\, \text{se}\left(\widehat\beta_j\right)
+$$
+
+y el estadistico de prueba para $Ho: \beta_{j} = B_{0}$ vs $Ho: \beta_{j} \neq B_{0}$ es
+
+$$T_{j,0} = \dfrac{\widehat\beta_j - B_{j,0}}{\text{se}\left(\widehat\beta_j\right)} \overset{\text{bajo }H_0}{\sim} t_{v: n - p}$$
+
+#### **Inferencia sobre un subconjunto de coeficientes**
+
+En ocasiones es necesario realizar pruebas de hipótesis sobre un subconjunto de parámetros, en estos caso se utiliza la prueba F, comparando el modelo completo contra el modelo reducido.
+
+
+#### **Inferencia sobre pronósticos**
+
+El pronóstico de $Y|x_{0}$, está dado por :
+
+$$\widehat{Y}_0 = \boldsymbol{x_0\widehat\beta} = \widehat\beta_0 + \widehat\beta_1x_{01} + \widehat\beta_2x_{02} + \cdots + \widehat\beta_kx_{0k},$$
+Se reemplaza los valores del vector $x_{0}$ en el modelo estimados
+
+Donde $\widehat{Y}_0$
+
+$$\widehat{Y}_0 \sim N\left(E\left[ Y\vert\boldsymbol{x_0}\right], \sigma^2\,\boldsymbol{x_0}\left(\boldsymbol{X}'\boldsymbol{X}\right)^{-1}\boldsymbol{x_0}'\right)$$
+y su intervalo de confianza está dado por :
+
+$$\widehat{y}_0 \pm t_{\alpha/2, n - p} \,\text{se}(\widehat{Y}_0).$$
+  
+  
+</br></br>
+
+#### **MAPA** 
+  
+
+```{r, echo=FALSE, , out.width="100%", fig.align = "center"}
+knitr::include_graphics("images/mapa2.png")  
+
+```
+
+
+</br></br>
+
+#### **CÓDIGO R**
+
+| concepto                   | código                                             |
+|:---------------------------|:---------------------------------------------------|
+| estimacion MCO             |`lm(y ~ x1 + x2 + x3 , data = namedata)`            |
+| estimación Steppwise       | `modelo_b0<- lm(y ~ 1, data=namedata)`             |
+|                            | `modelo_all <- lm(y ~ x1 + x2 + x3, data=namedata)`|
+|visualización de resultados | `summary(modelo)`                                  |
+| estimación paso a paso     |` modelo_b0<- lm(y ~ 1, data=namedata)`             |
+|                            |` modelo_all <-lm(y ~ x1 + x2 + ... + xk, data=namedata)`|
+||`forward <- step(modelo_b0, direction='forward', scope=formula(modelo_all), trace=0) `|
+| predición de y             | `predict(modelo)` |
+|                            | `new_obs= data.frame(x1=#,x2=#,...,xk=#)` |
+|                            | `predict(modelo, new_obs)` |
+
+## **CUESTIONARIO**
+
+### **Pregunta 1**
+
+La base de datos vivienda, contenida en paqueteMOD, contiene variables cuantitativas :
+
+* **preciom**      : precio de la vivienda
+* **areaconst**    : area construida
+* **parqueaderos** : número de parqueaderos
+* **banios**       : número de baños
+* **habitaciones** : número de habitaciones
+* **zona** : ubicación del apartamento
+* **piso** : piso de ubicación del apartamento
+* **estrato** : estrato socio económico donde se encuentra la vivienda
+
+A continuación se presenta los resultados de la estimacción MCO el modelo1 : 
+
+```{r, echo=FALSE, comment=NA}
+library(paqueteMODELOS)
+data(vivienda)
+modelo1=lm(preciom ~ areaconst + parqueaderos + banios + habitaciones, data=vivienda)
+summary(modelo1)
+```
+
+No es posible afirmar :
+
+```{r quiz_1}
+
+quiz(
+  question("",
+           correct = "Correcto!.El valor de la pendiente estimada es -41.83 , que corresponde al ajuste que hace el modelo cuando se adiciona una habitacion más a la vivienda",
+           allow_retry = TRUE,
+           answer("Un parqueadero adicional, incrementa el precio de la vivienda en 130.6 millones ", message = "No...intentalo de nuevo!"),
+           answer("Una habitación adicional vale 48.8 millones", correct = TRUE), 
+           answer("Cada metro cuadrado adicional de área construida incrementa la vivienda en $ 3 090", message = "Incorrecto. Intenta de nuevo!."),
+           answer("La razón por la que el coeficiente tenga un valor negativo, es que una vivenda por lo menos tiene un baño y una habitación y su área construida es superior a 30 m2", message = "No...intentalo de nuevo!"),
+           # Si no cambiamos estos textos en los botones, se mostrarán en Inglés
+           submit_button = "Enviar respuesta",
+           try_again_button = "Intentar de nuevo"),
+  # Si no ponemos un caption aparecerá la palabra Quiz en inglés.
+  caption = " "
+)
+
+```
+
+
+### **Pregunta 2**
+
+Del siguiente procesamiento podemos afirmar:
+
+```{r, echo=FALSE, comment=NA}
+library(paqueteMODELOS)
+data(vivienda)
+modelo1=lm(preciom ~ areaconst + parqueaderos + banios + habitaciones, data=vivienda)
+summary(modelo1)
+```
+
+
+```{r quiz_2}
+
+quiz(
+  question("¿Pregunta?",
+           correct = "Correcto!",
+           allow_retry = TRUE,
+           answer("El valor del estadístico F, indica que el modelo no es adecuado para la estimación del precio", message = "Cerca, pero no...intentalo de nuevo!"),
+           answer("El valor de R2 indica que el modelo es apropiado para la explicación de la variabilidad del precio", message = "No...intentalo de nuevo!"),
+           answer("El valor-p correspondeinte a la prueba de significancia individual para la variable regresora areaconst indica que su valor no es significativo estadñísticamente", message = "Incorrecto. Intenta de nuevo!."),
+           answer("El modelo  explica un 60.85% de la variabilidad del precio", correct = TRUE),
+           # Si no cambiamos estos textos en los botones, se mostrarán en Inglés
+           submit_button = "Enviar respuesta",
+           try_again_button = "Intentar de nuevo"),
+  # Si no ponemos un caption aparecerá la palabra Quiz en inglés.
+  caption = "  "
+)
+
+```
+
+
+### **Pregunta 3**
+
+En un modelo de Regresión Lineal Múltiple es necesario que se cumpla el supuesto de normalidad de los errores :
+
+
+```{r quiz_3}
+quiz(
+  question("",
+           correct = "Correcto!. Es necesario este supuesto para que la distribución de los estimadores de los coeficientes  y el estimador de Y, se distribuyan t-Student. Distribución base para la construcción de los intervalos de confianza y los estadístos de prueba asociados con las pruebas de hipótesis asociados ",
+           allow_retry = TRUE,
+           answer("Para poder que el método de MCO encuentre una solución única ", message = "No...intentalo de nuevo!"),
+           answer("Poder encontrar el valor de la variable respuesta,  dado un conjunto de valores de las variables regresoras", message = "No...intentalo de nuevo!"),
+           answer("Poder realizar inferencias sobre los coeficientes y la variable respuesta", correct = TRUE),
+           answer("Poder obtener un valor mayor del R2", message = "Incorrecto. Intenta de nuevo!."),
+           # Si no cambiamos estos textos en los botones, se mostrarán en Inglés
+           submit_button = "Enviar respuesta",
+           try_again_button = "Intentar de nuevo"),
+  # Si no ponemos un caption aparecerá la palabra Quiz en inglés.
+  caption = " "
+)
+
+``` 
+
+### **Pregunta 4**
+
+En la siguente estimación la variable tipo tiene dos posibles valores : Casa o Apartamento. 
+
+```{r, echo=FALSE, comment=NA}
+library(paqueteMODELOS)
+data(vivienda)
+modelo1=lm(preciom ~ parqueaderos + banios + tipo , data=vivienda)
+summary(modelo1)
+```
+
+A partir de los anteriores resultados podemos afirmar:
+
+```{r quiz_4}
+
+quiz(
+  question(" ",
+           correct = "Correcto!, El valor -62.9 indica que una casa tiene un valor de 62.9 millones menos que un apartamento, bajo el supuesto que todas las demás variables son constantes.",
+           allow_retry = TRUE,
+           answer("Todas las casas tienen un mayor valor que todos los apartamento", message = "Cerca, pero no...intentalo de nuevo!"),
+           answer("Todas las casas tienen un inferior  que todos los apartamentos", message = "Nop...intentalo de nuevo!"),
+           answer("Algunas casas pueden tener un valor superior a algunos apartamentos ", message = "Incorrecto. Intenta de nuevo!."),
+           answer("Ninguna de las anteriores", correct = TRUE),
+           # Si no cambiamos estos textos en los botones, se mostrarán en Inglés
+           submit_button = "Enviar respuesta",
+           try_again_button = "Intentar de nuevo"),
+  # Si no ponemos un caption aparecerá la palabra Quiz en inglés.
+  caption = "Visualización"
+)
+
+```
+
+
+<!-- ### **Pregunta 5** -->
+
+<!-- ```{r quiz_5} -->
+
+<!-- quiz( -->
+<!--   question("¿Pregunta?",  -->
+<!--            correct = "Respuesta y explicación!, .",  -->
+<!--            allow_retry = TRUE, -->
+<!--            answer("opción 1", message = "Cerca, pero no...intentalo de nuevo!"), -->
+<!--            answer("opción 2", message = "Nop...intentalo de nuevo!"), -->
+<!--            answer("opción 3", message = "Incorrecto. Intenta de nuevo!."), -->
+<!--            answer("opción 4", correct = TRUE), -->
+<!--            # Si no cambiamos estos textos en los botones, se mostrarán en Inglés   -->
+<!--            submit_button = "Enviar respuesta", -->
+<!--            try_again_button = "Intentar de nuevo"), -->
+<!--   # Si no ponemos un caption aparecerá la palabra Quiz en inglés. -->
+<!--   caption = "Visualización" -->
+<!-- ) -->
+
+<!-- ``` -->
+
+
+<!-- ### **Pregunta 6** -->
+
+<!-- ```{r quiz_6} -->
+
+<!-- quiz( -->
+<!--   question("¿Pregunta?",  -->
+<!--            correct = "Respuesta y explicación!, .",  -->
+<!--            allow_retry = TRUE, -->
+<!--            answer("opción 1", message = "Cerca, pero no...intentalo de nuevo!"), -->
+<!--            answer("opción 2", message = "Nop...intentalo de nuevo!"), -->
+<!--            answer("opción 3", message = "Incorrecto. Intenta de nuevo!."), -->
+<!--            answer("opción 4", correct = TRUE), -->
+<!--            # Si no cambiamos estos textos en los botones, se mostrarán en Inglés   -->
+<!--            submit_button = "Enviar respuesta", -->
+<!--            try_again_button = "Intentar de nuevo"), -->
+<!--   # Si no ponemos un caption aparecerá la palabra Quiz en inglés. -->
+<!--   caption = "Visualización" -->
+<!-- ) -->
+
+<!-- ``` -->
+
+
+<!-- ### **Pregunta 7** -->
+
+<!-- ```{r quiz_7} -->
+
+<!-- quiz( -->
+<!--   question("¿Pregunta?",  -->
+<!--            correct = "Respuesta y explicación!, .",  -->
+<!--            allow_retry = TRUE, -->
+<!--            answer("opción 1", message = "Cerca, pero no...intentalo de nuevo!"), -->
+<!--            answer("opción 2", message = "Nop...intentalo de nuevo!"), -->
+<!--            answer("opción 3", message = "Incorrecto. Intenta de nuevo!."), -->
+<!--            answer("opción 4", correct = TRUE), -->
+<!--            # Si no cambiamos estos textos en los botones, se mostrarán en Inglés   -->
+<!--            submit_button = "Enviar respuesta", -->
+<!--            try_again_button = "Intentar de nuevo"), -->
+<!--   # Si no ponemos un caption aparecerá la palabra Quiz en inglés. -->
+<!--   caption = "Visualización" -->
+<!-- ) -->
+
+<!-- ``` -->
+
+
+<!-- ### **Pregunta 8** -->
+
+<!-- ```{r quiz_8} -->
+
+<!-- quiz( -->
+<!--   question("¿Pregunta?",  -->
+<!--            correct = "Respuesta y explicación!, .",  -->
+<!--            allow_retry = TRUE, -->
+<!--            answer("opción 1", message = "Cerca, pero no...intentalo de nuevo!"), -->
+<!--            answer("opción 2", message = "Nop...intentalo de nuevo!"), -->
+<!--            answer("opción 3", message = "Incorrecto. Intenta de nuevo!."), -->
+<!--            answer("opción 4", correct = TRUE), -->
+<!--            # Si no cambiamos estos textos en los botones, se mostrarán en Inglés   -->
+<!--            submit_button = "Enviar respuesta", -->
+<!--            try_again_button = "Intentar de nuevo"), -->
+<!--   # Si no ponemos un caption aparecerá la palabra Quiz en inglés. -->
+<!--   caption = "Visualización" -->
+<!-- ) -->
+
+<!-- ``` -->
+
+
+<!-- ### **Pregunta 9** -->
+
+<!-- ```{r quiz_9} -->
+
+<!-- quiz( -->
+<!--   question("¿Pregunta?",  -->
+<!--            correct = "Respuesta y explicación!, .",  -->
+<!--            allow_retry = TRUE, -->
+<!--            answer("opción 1", message = "Cerca, pero no...intentalo de nuevo!"), -->
+<!--            answer("opción 2", message = "Nop...intentalo de nuevo!"), -->
+<!--            answer("opción 3", message = "Incorrecto. Intenta de nuevo!."), -->
+<!--            answer("opción 4", correct = TRUE), -->
+<!--            # Si no cambiamos estos textos en los botones, se mostrarán en Inglés   -->
+<!--            submit_button = "Enviar respuesta", -->
+<!--            try_again_button = "Intentar de nuevo"), -->
+<!--   # Si no ponemos un caption aparecerá la palabra Quiz en inglés. -->
+<!--   caption = "Visualización" -->
+<!-- ) -->
+
+<!-- ``` -->
+
+
+<!-- ### **Pregunta 10** -->
+
+<!-- ```{r quiz_10} -->
+
+<!-- quiz( -->
+<!--   question("¿Pregunta?",  -->
+<!--            correct = "Respuesta y explicación!, .",  -->
+<!--            allow_retry = TRUE, -->
+<!--            answer("opción 1", message = "Cerca, pero no...intentalo de nuevo!"), -->
+<!--            answer("opción 2", message = "Nop...intentalo de nuevo!"), -->
+<!--            answer("opción 3", message = "Incorrecto. Intenta de nuevo!."), -->
+<!--            answer("opción 4", correct = TRUE), -->
+<!--            # Si no cambiamos estos textos en los botones, se mostrarán en Inglés   -->
+<!--            submit_button = "Enviar respuesta", -->
+<!--            try_again_button = "Intentar de nuevo"), -->
+<!--   # Si no ponemos un caption aparecerá la palabra Quiz en inglés. -->
+<!--   caption = "Visualización" -->
+<!-- ) -->
+
+<!-- ``` -->
+
+
+## **PROBLEMAS**
+
+
+### **Problema 1**
+
+La base de datos `vivienda`, contenida en `paqueteMOD`, contiene variables cuantitativas :
+
+* **preciom**      : precio de la vivienda
+* **areaconst**    : area construida
+* **parqueaderos** : número de parqueaderos
+* **banios**       : número de baños
+* **habitaciones** : número de habitaciones
+* **zona** : ubicación del apartamento
+* **piso** : piso de ubicación del apartamento
+* **estrato** : estrato socio económico donde se encuentra la vivienda
+
+Calcule los estimadores para el modelo : preciom = areaconst + parqueaderos + banios + habitaciones
+
+
+```{r p1, exercise=TRUE, exercise.lines = 15}
+
+```
+
+
+```{r p1-hint}
+library(paqueteMODELOS)
+data("vivienda")
+
+```
+
+
+```{r p1-solution}
+library(paqueteMODELOS)
+data(vivienda)
+modelo1=lm(preciom ~ areaconst + parqueaderos + banios + habitaciones, data=vivienda)
+summary(modelo1)
+```
+
+
+
+### **Problema 2**
+
+La base de datos `vivienda`, contenida en `paqueteMOD`, contiene variables cuantitativas :
+
+* **preciom**      : precio de la vivienda
+* **areaconst**    : area construida
+* **parqueaderos** : número de parqueaderos
+* **banios**       : número de baños
+* **habitaciones** : número de habitaciones
+* **zona** : ubicación del apartamento
+* **piso** : piso de ubicación del apartamento
+* **estrato** : estrato socio económico donde se encuentra la vivienda
+
+Cree las variable binarias necesarias para incorporar la variable estrato socio económico al modelo  : 
+preciom ~ parqueaderos + banios + habitaciones + tipo + estrato
+
+
+```{r p2, exercise=TRUE, exercise.lines = 15}
+library(paqueteMODELOS)
+data(vivienda)
+
+
+```
+
+
+```{r p2-hint}
+library(paqueteMODELOS)
+data(vivienda)
+vivienda$E4<-as.numeric(vivienda$estrato==4)  
+vivienda$E5<-as.numeric(vivienda$estrato==5)  
+vivienda$E6<-as.numeric(vivienda$estrato==6)  
+
+```
+
+
+```{r p2-solution}
+library(paqueteMODELOS)
+data(vivienda)
+vivienda$E4<-as.numeric(vivienda$estrato==4)  
+vivienda$E5<-as.numeric(vivienda$estrato==5)  
+vivienda$E6<-as.numeric(vivienda$estrato==6)  
+modelo2=lm(preciom ~ parqueaderos + banios + habitaciones + tipo + E4 + E5 + E6, data=vivienda)
+summary(modelo2)
+```
+
+
+### **Problema 3**
+
+La base de datos `vivienda`, contenida en `paqueteMOD`, contiene variables cuantitativas :
+
+* **preciom**      : precio de la vivienda
+* **areaconst**    : area construida
+* **parqueaderos** : número de parqueaderos
+* **banios**       : número de baños
+* **habitaciones** : número de habitaciones
+* **zona** : ubicación del apartamento
+* **piso** : piso de ubicación del apartamento
+* **estrato** : estrato socio económico donde se encuentra la vivienda
+
+Realice una estimación del mejor modelo utilizando el método Steppwise (paso a paso)
+
+```{r p3, exercise=TRUE, exercise.lines = 15}
+library(paqueteMODELOS)
+data(vivienda)
+vivienda <- na.omit(vivienda)
+
+```
+
+
+```{r p3-hint}
+library(paqueteMODELOS)
+data(vivienda)
+vivienda <- na.omit(vivienda)
+modelo_b0<- lm(preciom ~ 1, data=vivienda) # modelo y= b0
+modelo_all <- lm(preciom ~ parqueaderos + banios + habitaciones + tipo + estrato, data=vivienda) # modelo con todas las variables independientes
+
+```
+
+
+```{r p3-solution}
+library(paqueteMODELOS)
+data(vivienda)
+vivienda <- na.omit(vivienda)
+modelo_b0<- lm(preciom ~ 1, data=vivienda) # modelo y= b0
+modelo_all <- lm(preciom ~ parqueaderos + banios + habitaciones + tipo + estrato, data=vivienda) # modelo con todas las variables independientes
+forward <- step(modelo_b0, direction='forward', scope=formula(modelo_all), trace=0)
+summary(forward)
+```
+
+
+
+### **Problema 4**
+
+La base de datos `vivienda`, contenida en `paqueteMOD`, contiene variables cuantitativas :
+
+* **preciom**      : precio de la vivienda
+* **areaconst**    : area construida
+* **parqueaderos** : número de parqueaderos
+* **banios**       : número de baños
+* **habitaciones** : número de habitaciones
+* **zona** : ubicación del apartamento
+* **piso** : piso de ubicación del apartamento
+* **estrato** : estrato socio económico donde se encuentra la vivienda
+
+Realice una estimación de los coeficientes del modelo :
+`preciom ~ parqueaderos + banios + habitaciones + tipo + estrato` 
+
+Utilizando para ello el método de remuestreo bootstrapping
+
+
+```{r p4, exercise=TRUE, exercise.lines = 25}
+library(paqueteMODELOS)
+data(vivienda)
+vivienda <- na.omit(vivienda)
+
+```
+
+
+```{r p4-hint}
+library(paqueteMODELOS)
+data(vivienda)
+vivienda <- na.omit(vivienda)
+modelo1=lm(preciom ~ parqueaderos + banios + habitaciones , data=vivienda)
+```
+
+
+```{r p4-solution}
+library(paqueteMODELOS)
+library(boot)
+library(ggplot2)
+library(gridExtra)
+data(vivienda)
+vivienda <- na.omit(vivienda)
+modelo1=lm(preciom ~ parqueaderos + banios + habitaciones + tipo + estrato, data=vivienda)
+
+
+# Se define la función que devuelve los coeficientes de regresión
+fun_coeficientes <- function(data, index){
+  return(coef(lm(preciom ~ parqueaderos + banios + habitaciones , data = vivienda, subset = index)))
+}
+beta_0 <- rep(NA,9999)
+beta_1 <- rep(NA,9999)
+beta_2 <- rep(NA,9999)
+beta_3 <- rep(NA,9999)
+
+for(i in 1:9999) {
+  coeficientes <- fun_coeficientes(data = arboles1,
+                                   index = sample(1:90, 90, replace = TRUE))
+  beta_0[i] <- coeficientes[1]
+  beta_1[i] <- coeficientes[2]
+  beta_2[i] <- coeficientes[3]
+  beta_3[i] <- coeficientes[4]
+  }
+# Se grafica la distribución de los coeficientes
+p0 <- ggplot(data = data.frame(beta_0 = beta_0), aes(beta_0)) +
+  geom_histogram(colour = "firebrick3") + 
+  theme_bw()
+p1 <- ggplot(data = data.frame(beta_1 = beta_1), aes(beta_1)) +
+  geom_histogram(colour = "firebrick3") +
+  theme_bw()
+p2 <- ggplot(data = data.frame(beta_2 = beta_2), aes(beta_2)) +
+  geom_histogram(colour = "firebrick3") +
+  theme_bw()
+p3 <- ggplot(data = data.frame(beta_3 = beta_3), aes(beta_3)) +
+  geom_histogram(colour = "firebrick3") +
+  theme_bw()
+
+grid.arrange(p0,p1,p2, p3, ncol = 2, nrow=2,top = "Bootstrap distribution de los coeficientes")
+#  se calcula la media de los coeficientes estimados
+betas_boot=data.frame(beta_0,  beta_1,beta_2, beta_3)
+apply(betas_boot, 2,mean)
+```
+
+
+
+### **Problema 5**
+
+La base de datos `vivienda`, contenida en `paqueteMOD`, contiene variables cuantitativas :
+
+* **preciom**      : precio de la vivienda
+* **areaconst**    : area construida
+* **parqueaderos** : número de parqueaderos
+* **banios**       : número de baños
+* **habitaciones** : número de habitaciones
+* **zona** : ubicación del apartamento
+* **piso** : piso de ubicación del apartamento
+* **estrato** : estrato socio económico donde se encuentra la vivienda
+
+Compare los principales indicadores de ajustes de los modelos :
+
+1. `preciom ~ parqueaderos + banios + tipo ` 
+2. `preciom ~ parqueaderos + banios + tipo + estrato` 
+3. `preciom ~ parqueaderos + banios + habitaciones + tipo + estrato` 
+4. `preciom ~ parqueaderos + banios + habitaciones + areaconst + tipo + estrato` 
+
+
+```{r p5, exercise=TRUE, exercise.lines = 15}
+library(paqueteMODELOS)
+library(knitr)
+library(stargazer)
+data(vivienda)
+vivienda <- na.omit(vivienda)
+
+```
+
+
+```{r p5-hint}
+library(paqueteMODELOS)
+library(knitr)
+library(broom)
+library(stargazer)
+data(vivienda)
+vivienda <- na.omit(vivienda)
+modelo1<-lm(preciom ~ parqueaderos + banios +  tipo, data= vivienda)
+modelo2<-lm(preciom ~ parqueaderos + banios + tipo + estrato, data=vivienda)
+modelo3<-lm(preciom ~ parqueaderos + banios + habitaciones + tipo + estrato, data=vivienda)
+modelo4<-lm(preciom ~ parqueaderos + banios + habitaciones + areaconst + tipo + estrato, data=vivienda)
+
+
+
+```
+
+
+```{r p5-solution}
+library(paqueteMODELOS)
+library(knitr)
+library(broom)
+library(stargazer)
+data(vivienda)
+vivienda <- na.omit(vivienda)
+modelo1<-lm(preciom ~ parqueaderos + banios +  tipo, data= vivienda)
+modelo2<-lm(preciom ~ parqueaderos + banios + tipo + estrato, data=vivienda)
+modelo3<-lm(preciom ~ parqueaderos + banios + habitaciones + tipo + estrato, data=vivienda)
+modelo4<-lm(preciom ~ parqueaderos + banios + habitaciones + areaconst + tipo + estrato, data=vivienda)
+#construcción de indicadores
+g1 <- glance(modelo1)
+g2 <- glance(modelo2)
+g3 <- glance(modelo3)
+g4 <- glance(modelo4)
+
+kable(rbind(g1, g2, g3, g4), digits = 2)
+
+
+```
+
+
+
+<!-- ### **Problema 6** -->
+<!-- Enunciado -->
+
+<!-- ```{r p6, exercise=TRUE, exercise.lines = 15} -->
+
+
+<!-- ``` -->
+
+
+<!-- ```{r p6-hint} -->
+
+
+<!-- ``` -->
+
+
+<!-- ```{r p6-solution} -->
+
+<!-- ``` -->
+
+
+
+<!-- ### **Problema 7** -->
+
+<!-- Enunciado -->
+
+<!-- ```{r p7, exercise=TRUE, exercise.lines = 15} -->
+
+
+<!-- ``` -->
+
+
+<!-- ```{r p7-hint} -->
+
+
+<!-- ``` -->
+
+
+<!-- ```{r p7-solution} -->
+
+<!-- ``` -->
+
+
+
+<!-- ### **Problema 8** -->
+
+<!-- Enunciado -->
+
+<!-- ```{r p8, exercise=TRUE, exercise.lines = 15} -->
+
+
+<!-- ``` -->
+
+
+<!-- ```{r p8-hint} -->
+
+
+<!-- ``` -->
+
+
+<!-- ```{r p8-solution} -->
+
+<!-- ``` -->
+
+
+
+<!-- ### **Problema 9** -->
+
+<!-- Enunciado -->
+
+<!-- ```{r p9, exercise=TRUE, exercise.lines = 15} -->
+
+
+<!-- ``` -->
+
+
+<!-- ```{r p9-hint} -->
+
+
+<!-- ``` -->
+
+
+<!-- ```{r p9-solution} -->
+
+<!-- ``` -->
+
+
+
+<!-- ### **Problema 10** -->
+
+<!-- Enunciado -->
+
+<!-- ```{r p10, exercise=TRUE, exercise.lines = 15} -->
+
+
+<!-- ``` -->
+
+
+<!-- ```{r p10-hint} -->
+
+
+<!-- ``` -->
+
+
+<!-- ```{r p10-solution} -->
+
+<!-- ``` -->
+
