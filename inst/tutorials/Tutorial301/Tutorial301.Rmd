@@ -299,32 +299,60 @@ quiz(
 
 ### **Problema 1** 
 
-Enunciado  
+Una endidad financiera quiere utilizar la regresión logística para estimar un modelo que pueda predecir la probabilidad de que un cliente solicite un préstamo. Para ello cuenta con el registro de datos de sus clientes : 
+
+* aceptación del ofrecimiento: 1: acepta, 0 = no acepta
+* edad en años
+* ingresos millone de pesos
+* deuda en millones de pesos
+
+Este código carga los datos loans y crea un modelo de regresión logística con las variables edad, ingresos, y deuda como variables independientes. El resumen del modelo muestra los coeficientes y la bondad del ajuste del modelo
 
 ```{r p1, exercise=TRUE, exercise.lines = 15}  
-
+# Cargar los datos
+loans <- data.frame(aceptado = c(1, 1, 0, 0, 1, 1, 1, 0, 0, 1),
+               edad = c(25, 30, 35, 40, 25, 30, 35, 40, 45, 50),
+               ingresos = c(5.0, 7.5, 9.30, 11.4, 5.7, 7.6, 9.5, 11.3, 13.2, 15.3),
+               deuda =    c(1.0, 2.700, 3.6, 4.7, 1.5, 2.3, 3.8, 4.6, 6.5, 6.8))
 
 ```  
 
 
 ```{r p1-hint}  
-
+# Cargar los datos
+loans <- data.frame(aceptado = c(1, 1, 0, 0, 1, 1, 1, 0, 0, 1),
+               edad = c(25, 30, 35, 40, 25, 30, 35, 40, 45, 50),
+               ingresos = c(5.0, 7.5, 9.30, 11.4, 5.7, 7.6, 9.5, 11.3, 13.2, 15.3),
+               deuda =    c(1.0, 2.700, 3.6, 4.7, 1.5, 2.3, 3.8, 4.6, 6.5, 6.8))
+# Crear el modelo
+modelo <- glm()
 
 ```  
 
 
 ```{r p1-solution}  
-
+# Cargar los datos
+loans <- data.frame(aceptado = c(1, 1, 0, 0, 1, 1, 1, 0, 0, 1),
+               edad = c(25, 30, 35, 40, 25, 30, 35, 40, 45, 50),
+               ingresos = c(5.0, 7.5, 9.30, 11.4, 5.7, 7.6, 9.5, 11.3, 13.2, 15.3),
+               deuda =    c(1.0, 2.700, 3.6, 4.7, 1.5, 2.3, 3.8, 4.6, 6.5, 6.8))
+# Crear el modelo
+modelo <- glm(aceptado ~ edad + ingresos + deuda, data = loans, family = "binomial")
+# Resumen del modelo
+summary(modelo)
 ```  
 
 
 
 ### **Problema 2**  
 
-Enunciado  
+Un centro médico quiere desarrollar un modelo para predecir la probabilidad de que un paciente sufra un infarto. El centro tiene datos sobre los pacientes, incluyendo su edad, actividad física, historial de angina, y presión arterial.
+
+El centro médico quiere utilizar la regresión logística para estimar un modelo que pueda predecir la probabilidad de que un paciente sufra un infarto.
 
 ```{r p2, exercise=TRUE, exercise.lines = 15}  
-
+library(paqueteMODELOS)
+data(corazon)
 
 ```  
 
