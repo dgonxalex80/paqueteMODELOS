@@ -350,6 +350,9 @@ Un centro médico quiere desarrollar un modelo para predecir la probabilidad de 
 
 El centro médico quiere utilizar la regresión logística para estimar un modelo que pueda predecir la probabilidad de que un paciente sufra un infarto.
 
+Como primer paso requiere que seleccione una parte de la data equivalene al 60% (train) para desarrollar el modelo y el resto para realizar la evaluación del mismo (test).
+
+
 ```{r p2, exercise=TRUE, exercise.lines = 15}  
 library(paqueteMODELOS)
 data(corazon)
@@ -358,12 +361,25 @@ data(corazon)
 
 
 ```{r p2-hint}  
-
+library(paqueteMODELOS)
+data(corazon)
 
 ```  
 
 
 ```{r p2-solution}  
+library(paqueteMODELOS)
+library(ROSE)
+data(corazon)
+table(corazon$infarto)
+# separacion de muetras
+ntrain <- nrow(corazon)*0.6
+ntest <- nrow(corazon)*0.4
+
+set.seed(123)
+index_train<-sample(1:nrow(corazon),size = ntrain)
+train<-corazon[index_train,]  # muestra de entrenamiento
+test<-corazon[-index_train,]  # muestra de prueba
 
 ```  
 
@@ -371,65 +387,256 @@ data(corazon)
 
 ### **Problema 3**  
 
-Enunciado  
+Como el resultado del anterior proceso no corresponde a una base balanceada (proporciones iguales o similares de la variables respuesta (infarto) se propone realizar un balanceo de las bases utilizando para ello la función `ovun.sample` del paquete  `ROSE`
+
 
 ```{r p3, exercise=TRUE, exercise.lines = 15}  
+library(paqueteMODELOS)
+data(corazon)
+table(corazon$infarto)
+# separacion de muetras
+ntrain <- nrow(corazon)*0.6
+ntest <- nrow(corazon)*0.4
 
+set.seed(123)
+index_train<-sample(1:nrow(corazon),size = ntrain)
+train<-corazon[index_train,]  # muestra de entrenamiento
+test<-corazon[-index_train,]  # muestra de prueba
 
 ```  
 
 
 ```{r p3-hint}  
+library(paqueteMODELOS)
+library(ROSE)
+data(corazon)
+table(corazon$infarto)
+# separacion de muetras
+ntrain <- nrow(corazon)*0.6
+ntest <- nrow(corazon)*0.4
 
+set.seed(123)
+index_train<-sample(1:nrow(corazon),size = ntrain)
+train<-corazon[index_train,]  # muestra de entrenamiento
+test<-corazon[-index_train,]  # muestra de prueba
+# oversampling
+train.blc <- ovun.sample()
+test.blc <- ovun.sample()
 
 ```  
 
 
 ```{r p3-solution}  
+library(paqueteMODELOS)
+library(ROSE)
+data(corazon)
+table(corazon$infarto)
+# separacion de muetras
+ntrain <- nrow(corazon)*0.6
+ntest <- nrow(corazon)*0.4
 
+set.seed(123)
+index_train<-sample(1:nrow(corazon),size = ntrain)
+train<-corazon[index_train,]  # muestra de entrenamiento
+test<-corazon[-index_train,]  # muestra de prueba
+
+# oversampling
+train.blc <- ovun.sample(infarto~., data=train, 
+                         p=0.5, seed=1, 
+                         method="over")$data
+
+test.blc <- ovun.sample(infarto~., data=test, 
+                        p=0.5, seed=1, 
+                        method="over")$data
+table(train.blc$infarto)
+table(test.blc$infarto)
 ```  
 
 
 
 ### **Problema 4**  
 
-Enunciado  
+A partir del resultado anterior tome la data train.blc y estime el modelo correspondiente 
+
 
 ```{r p4, exercise=TRUE, exercise.lines = 15}  
+library(paqueteMODELOS)
+library(ROSE)
+data(corazon)
+table(corazon$infarto)
+# separacion de muetras
+ntrain <- nrow(corazon)*0.6
+ntest <- nrow(corazon)*0.4
+
+set.seed(123)
+index_train<-sample(1:nrow(corazon),size = ntrain)
+train<-corazon[index_train,]  # muestra de entrenamiento
+test<-corazon[-index_train,]  # muestra de prueba
+
+# oversampling
+train.blc <- ovun.sample(infarto~., data=train, 
+                         p=0.5, seed=1, 
+                         method="over")$data
+
+test.blc <- ovun.sample(infarto~., data=test, 
+                        p=0.5, seed=1, 
+                        method="over")$data
 
 
 ```  
 
 
 ```{r p4-hint}  
+library(paqueteMODELOS)
+library(ROSE)
+data(corazon)
+table(corazon$infarto)
+# separacion de muetras
+ntrain <- nrow(corazon)*0.6
+ntest <- nrow(corazon)*0.4
+
+set.seed(123)
+index_train<-sample(1:nrow(corazon),size = ntrain)
+train<-corazon[index_train,]  # muestra de entrenamiento
+test<-corazon[-index_train,]  # muestra de prueba
+
+# oversampling
+train.blc <- ovun.sample(infarto~., data=train, 
+                         p=0.5, seed=1, 
+                         method="over")$data
+
+test.blc <- ovun.sample(infarto~., data=test, 
+                        p=0.5, seed=1, 
+                        method="over")$data
+
+glm(    , family = binomial(link = "logit"), data = train.blc) -> modelo1
 
 
 ```  
 
 
 ```{r p4-solution}  
+library(paqueteMODELOS)
+library(ROSE)
+data(corazon)
+table(corazon$infarto)
+# separacion de muetras
+ntrain <- nrow(corazon)*0.6
+ntest <- nrow(corazon)*0.4
 
+set.seed(123)
+index_train<-sample(1:nrow(corazon),size = ntrain)
+train<-corazon[index_train,]  # muestra de entrenamiento
+test<-corazon[-index_train,]  # muestra de prueba
+
+# oversampling
+train.blc <- ovun.sample(infarto~., data=train, 
+                         p=0.5, seed=1, 
+                         method="over")$data
+
+test.blc <- ovun.sample(infarto~., data=test, 
+                        p=0.5, seed=1, 
+                        method="over")$data
+glm(infarto ~ edad + angina + presion , family = binomial(link = "logit"), data = train.blc) -> modelo1
 ```  
 
 
 
 ### **Problema 5**  
 
-Enunciado  
+Finalmete se requiere evaliar el modelo utilizando para ello la base test
+
 
 ```{r p5, exercise=TRUE, exercise.lines = 15}  
+library(paqueteMODELOS)
+library(ROSE)
+data(corazon)
+table(corazon$infarto)
+# separacion de muetras
+ntrain <- nrow(corazon)*0.6
+ntest <- nrow(corazon)*0.4
 
+set.seed(123)
+index_train<-sample(1:nrow(corazon),size = ntrain)
+train<-corazon[index_train,]  # muestra de entrenamiento
+test<-corazon[-index_train,]  # muestra de prueba
+
+# oversampling
+train.blc <- ovun.sample(infarto~., data=train, 
+                         p=0.5, seed=1, 
+                         method="over")$data
+
+test.blc <- ovun.sample(infarto~., data=test, 
+                        p=0.5, seed=1, 
+                        method="over")$data
+glm(infarto ~ edad + angina + presion , family = binomial(link = "logit"), data = train.blc) -> modelo1
 
 ```  
 
 
 ```{r p5-hint}  
+library(paqueteMODELOS)
+library(ROSE)
+data(corazon)
+table(corazon$infarto)
+# separacion de muetras
+ntrain <- nrow(corazon)*0.6
+ntest <- nrow(corazon)*0.4
+
+set.seed(123)
+index_train<-sample(1:nrow(corazon),size = ntrain)
+train<-corazon[index_train,]  # muestra de entrenamiento
+test<-corazon[-index_train,]  # muestra de prueba
+
+# oversampling
+train.blc <- ovun.sample(infarto~., data=train, 
+                         p=0.5, seed=1, 
+                         method="over")$data
+
+test.blc <- ovun.sample(infarto~., data=test, 
+                        p=0.5, seed=1, 
+                        method="over")$data
+glm(infarto ~ edad + angina + presion , family = binomial(link = "logit"), data = train.blc) -> modelo1
+
+# matriz de confucion
+valor_pronosticado <- predict(modelo1,test.blc,type = "response")
+niveles_pronosticados <- ifelse(valor_pronosticado >0.5, "Si","No") %>%
+  factor(.)
 
 
 ```  
 
 
 ```{r p5-solution}  
+library(paqueteMODELOS)
+library(ROSE)
+data(corazon)
+table(corazon$infarto)
+# separacion de muetras
+ntrain <- nrow(corazon)*0.6
+ntest <- nrow(corazon)*0.4
 
+set.seed(123)
+index_train<-sample(1:nrow(corazon),size = ntrain)
+train<-corazon[index_train,]  # muestra de entrenamiento
+test<-corazon[-index_train,]  # muestra de prueba
+
+# oversampling
+train.blc <- ovun.sample(infarto~., data=train, 
+                         p=0.5, seed=1, 
+                         method="over")$data
+
+test.blc <- ovun.sample(infarto~., data=test, 
+                        p=0.5, seed=1, 
+                        method="over")$data
+glm(infarto ~ edad + angina + presion , family = binomial(link = "logit"), data = train.blc) -> modelo1
+
+
+# matriz de confucion
+valor_pronosticado <- predict(modelo1,test.blc,type = "response")
+niveles_pronosticados <- ifelse(valor_pronosticado >0.5, "Si","No") %>%
+  factor(.)
+
+confusionMatrix(niveles_pronosticados, test.blc$gana )
 ```  
 
