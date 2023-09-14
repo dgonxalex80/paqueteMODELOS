@@ -308,7 +308,7 @@ Una endidad financiera quiere utilizar la regresión logística para estimar un 
 
 Este código carga los datos loans y crea un modelo de regresión logística con las variables edad, ingresos, y deuda como variables independientes. El resumen del modelo muestra los coeficientes y la bondad del ajuste del modelo
 
-```{r p1, exercise=TRUE, exercise.lines = 15}  
+```{r p1, exercise=TRUE, exercise.lines = 20}  
 # Cargar los datos
 loans <- data.frame(aceptado = c(1, 1, 0, 0, 1, 1, 1, 0, 0, 1),
                edad = c(25, 30, 35, 40, 25, 30, 35, 40, 45, 50),
@@ -353,7 +353,7 @@ El centro médico quiere utilizar la regresión logística para estimar un model
 Como primer paso requiere que seleccione una parte de la data equivalene al 60% (train) para desarrollar el modelo y el resto para realizar la evaluación del mismo (test).
 
 
-```{r p2, exercise=TRUE, exercise.lines = 15}  
+```{r p2, exercise=TRUE, exercise.lines = 30}  
 library(paqueteMODELOS)
 data(corazon)
 
@@ -390,7 +390,7 @@ test<-corazon[-index_train,]  # muestra de prueba
 Como el resultado del anterior proceso no corresponde a una base balanceada (proporciones iguales o similares de la variables respuesta (infarto) se propone realizar un balanceo de las bases utilizando para ello la función `ovun.sample` del paquete  `ROSE`
 
 
-```{r p3, exercise=TRUE, exercise.lines = 15}  
+```{r p3, exercise=TRUE, exercise.lines = 40}  
 library(paqueteMODELOS)
 data(corazon)
 table(corazon$infarto)
@@ -459,7 +459,7 @@ table(test.blc$infarto)
 A partir del resultado anterior tome la data train.blc y estime el modelo correspondiente 
 
 
-```{r p4, exercise=TRUE, exercise.lines = 15}  
+```{r p4, exercise=TRUE, exercise.lines = 40}  
 library(paqueteMODELOS)
 library(ROSE)
 data(corazon)
@@ -547,7 +547,7 @@ glm(infarto ~ edad + angina + presion , family = binomial(link = "logit"), data 
 Finalmete se requiere evaliar el modelo utilizando para ello la base test
 
 
-```{r p5, exercise=TRUE, exercise.lines = 15}  
+```{r p5, exercise=TRUE, exercise.lines = 50}  
 library(paqueteMODELOS)
 library(ROSE)
 data(corazon)
