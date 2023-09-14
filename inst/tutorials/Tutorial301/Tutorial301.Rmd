@@ -1,0 +1,407 @@
+---
+title: "**MODELO LINEAL GENERAL**"
+author: Modelos Estadística para la toma de decisiones
+output: 
+  learnr::tutorial:
+    css: css/learnr_metadocencia.css
+    progressive: true # los encabezados de tercer nivel (###) son revelados progresivamente
+    allow_skip: true # permite saltearse los ejercicios. 
+    language:
+      es: tutorial_es.json
+description: "Tutorial interactivo conceptos básicos de probabilidad" # Esta descripción se ve en el panel Tutorial de RStudio 
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(paqueteMODELOS)
+library(boot)
+library(ggplot2)
+library(gridExtra)
+library(knitr)
+library(broom)
+library(stargazer)
+
+knitr::opts_chunk$set(echo = FALSE,
+exercise.warn_invisible = FALSE)
+# colores
+c1="#FF7F00" # NARANJA COLOR PRINCIPAL
+c2="#034a94" # AZUL FUERTE COLOR SECUNDARIO  
+c3="#0eb0c6" # AZUL CLARO COLOR TERCEARIO  
+c4="#686868" # GRIS COLOR TEXTO 
+##  <div class="content-box-blue">    </div> ## caja azul
+```
+
+## **PRESENTACIÓN**
+
+```{r, echo=FALSE, out.width="100%", fig.align = "center"}
+knitr::include_graphics("images/modulo1.png")
+```
+
+
+El presente tutorial contiene preguntas relacionadas con l estimación del modelo y sus supuestos, conceptos importante para la compresión los proceso relacionados con la inferencia realizada sobre los resultados obtenidos por el método de MCO.   
+
+</br>
+
+### **CONCEPTOS**
+
+##### **Variable Dependiente Binaria**: 
+
+En el modelo logit, tienes una variable dependiente binaria, denotada comúnmente como \(Y\), que toma uno de dos valores posibles, generalmente 1 para el evento de interés (éxito) y 0 para el evento contrario (fracaso).
+
+##### **Función Logit**: 
+
+El corazón del modelo logit es la función logit, que relaciona la probabilidad de éxito con una combinación lineal de las variables independientes. La función logit se define como \( \ln\left(\frac{p}{1-p}\right) \), donde \(p\) es la probabilidad de éxito.
+
+##### **Variables Independientes**: 
+
+El modelo logit también incluye variables independientes (predictores o covariables), denotadas comúnmente como \(X\). Estas variables explicativas se utilizan para predecir la probabilidad de éxito.
+
+##### **Coeficientes del Modelo**: 
+
+El modelo logit estima coeficientes para cada variable independiente en la ecuación logit. Estos coeficientes indican cómo influyen las variables independientes en la probabilidad de éxito. Un coeficiente positivo aumenta la probabilidad de éxito, mientras que un coeficiente negativo la disminuye.
+
+##### **Probabilidad de Éxito**: 
+
+El modelo logit permite calcular la probabilidad estimada de éxito para cualquier conjunto dado de valores de las variables independientes utilizando la función logit inversa (también conocida como la función sigmoide): \(p = \frac{e^{\beta_0 + \beta_1X_1 + \beta_2X_2 + \ldots + \beta_kX_k}}{1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2 + \ldots + \beta_kX_k}}\).
+
+##### **Estimación de Parámetros**: 
+
+Los coeficientes \(\beta\) del modelo logit se estiman mediante técnicas estadísticas, como la máxima verosimilitud, para encontrar los valores que mejor ajustan los datos observados.
+
+##### **Bondad de Ajuste**: 
+
+La bondad de ajuste del modelo logit se evalúa utilizando diversas métricas, como la devianza, la pseudo R-cuadrada y el test de Wald, para determinar qué tan bien se ajusta el modelo a los datos.
+
+##### **Predicción y Clasificación**: 
+
+El modelo logit se utiliza comúnmente para predecir la probabilidad de que ocurra un evento y para clasificar observaciones en función de su probabilidad estimada. Se puede establecer un umbral para clasificar las observaciones en las categorías de éxito y fracaso.
+
+##### **Supuestos del Modelo**: 
+
+Los supuestos clave del modelo logit incluyen la linealidad en logit, la independencia de errores, la falta de colinealidad entre las variables independientes y la ausencia de valores atípicos.
+
+El modelo logit es ampliamente utilizado en diversas disciplinas, como la economía, la epidemiología, la ciencia política y la investigación de mercado, cuando se trata de analizar y predecir eventos binarios. Ayuda a comprender cómo las variables independientes afectan la probabilidad de ocurrencia de un evento particular.
+
+<br/><br/>
+
+### **Modelo**
+
+
+$$Y = \beta_{0} + \beta_{1}X_{1} + \varepsilon$$
+
+
+Donde la variable $Y$ es una variable con dos categorías (binaria), la variable $X$ corresponde a una variable numérica y $\varepsilon$ corresponde a una variable aleatoria no observable.
+
+
+<br/><br/>
+
+#### **Estimación**
+
+Su estimación se puede plantear de manera resumida como:
+
+
+
+$$\ln \Bigg(\dfrac{P_{i}}{1-P_{i}} \Bigg) = \ln (Odds) =\beta_{0} + \beta_{1} \hspace{.2cm}x_{i} + \varepsilon_{i}^{*}$$
+
+<br/><br/>
+
+### **Interpretación de los resultados**
+
+
+</br>
+
+* $\ln(odds) = \ln \Bigg(\dfrac{P_{i}}{1-P_{i}} \Bigg) = \ln \Bigg(\dfrac{P(Y=k|X=x)}{1-P(Y=k|X=x)}\Bigg)$
+
+</br>
+
+* $\ln \Bigg(\dfrac{1}{0}\Bigg) \hspace{.5cm}\text{si el caso se clasifica como exitoso}$
+
+</br>
+
+* $\ln \Bigg(\dfrac{0}{1}\Bigg) \hspace{.5cm}\text{si el caso se clasifica como fracaso}$
+
+</br></br>
+
+
+
+El resultado se puede interpretar como:
+
+</br>
+
+|    |                  |          |                                      |           |                |
+|:---|:-----------------|:---------|:-------------------------------------|-----------|:---------------|
+| Si |$P_{i} = 1-P_{i}$ | entonces |$\dfrac{P_{i}}{1-P_{i}} = Odds =1$,   | por tanto | $\ln(Odds) = 0$|     
+|    |                  |          |                                      |           |                |
+| Si | $P_{i} < 1-P_{i}$| entonces | $\dfrac{P_{i}}{1-P_{i}} = Odds < 1$,| por tanto | $\ln(Odds) < 0$|      
+|    |                  |          |                                      |           |                |
+| Si | $P_{i} > 1-P_{i}$| entonces | $\dfrac{P_{i}}{1-P_{i}} = Odds > 1$, | por tanto |$\ln(Odds) > 0$ |     
+
+
+
+</br></br>
+
+### **MAPA** 
+
+
+```{r, echo=FALSE, , out.width="100%", fig.align = "center"}
+# knitr::include_graphics("images/mapa2.png")  
+
+```
+
+
+</br></br>
+
+### **CÓDIGO R**
+
+| concepto                   | código                                             |
+|:---------------------------|:---------------------------------------------------|
+| balance de categorías      | `ovun.sample(y~., data=train, p=0.5, seed=1,method="over")$data` |
+| estimacion                 | `glm(y ~  x1 +x2 + x3, data = datos, family = binomial)`|
+| visualización resultados   | `summary(modelo)`                                  |
+| selección de variables     | `modelo_stepwise <- step(modelo_completo, direction = "forward")`|
+| predicción de y            | `predict(modelo, nuevos_datos, type = "response")` |
+| evaluación                 | `confusionMatrix(data, nivel_pronosticado, y)`     |
+| curva ROC                  | `roc(test$y, valor_pronosticado)`                  |
+| AUC                        | `auc(curva_ROC, levels =c(0,1), direction = "<")`  |
+
+## **CUESTIONARIO**
+
+
+### **Pregunta 1**  
+
+```{r quiz_1}  
+
+quiz(  
+  question("¿Cuáles son los requisitos entorno a las variables en un modelo regresión logística?",   
+         correct = "Correcto!, .",
+           allow_retry = TRUE,  
+           answer("La variable dependiente debe ser dicotómica. Las variables independientes deben ser numéricas o categóricas. La relación entre las variables independientes y la variable dependiente debe ser lineal.", message = "Cerca, pero no...intentalo de nuevo!"),  
+           answer("La variable dependiente debe ser continua. Las variables independientes pueden ser numéricas o categóricas. La relación entre las variables independientes y la variable dependiente no debe ser lineal.", message = "Nop...intentalo de nuevo!"),  
+           answer("La variable dependiente debe ser continua. Las variables independientes pueden ser numéricas o categóricas. La relación entre las variables independientes y la variable dependiente debe ser lineal.", message = "Incorrecto. Intenta de nuevo!."),  
+           answer("La variable dependiente debe ser dicotómica. Las variables independientes pueden ser numéricas o categóricas. La relación entre las variables independientes y la variable dependiente debe ser lineal.", correct = TRUE),  
+           # Si no cambiamos estos textos en los botones, se mostrarán en Inglés    
+           submit_button = "Enviar respuesta",  
+           try_again_button = "Intentar de nuevo"),  
+  # Si no ponemos un caption aparecerá la palabra Quiz en inglés.  
+  caption = "Visualización"  
+)  
+```  
+
+
+### **Pregunta 2**  
+
+```{r quiz_2}  
+
+quiz(  
+    question("¿Cuál es la función de probabilidad utilizada en el modelo logit? ",   
+             correct = "Correcto. La función logística se utiliza para modelar la probabilidad en el modelo logit. Esta función tiene forma de S.",   
+             allow_retry = TRUE,  
+             answer("función logaritmica", message = "Cerca, pero no...intentalo de nuevo!"),  
+             answer("función logística", correct = TRUE),  
+             answer("función normal", message = "Incorrecto. Intenta de nuevo!."),  
+             answer("función exponencial", message = "Nop...intentalo de nuevo!"), 
+             # Si no cambiamos estos textos en los botones, se mostrarán en Inglés    
+             submit_button = "Enviar respuesta",  
+             try_again_button = "Intentar de nuevo"),  
+    # Si no ponemos un caption aparecerá la palabra Quiz en inglés.  
+    caption = "Visualización"  
+)  
+```  
+
+
+### **Pregunta 3**  
+
+```{r quiz_3}  
+
+  quiz(  
+    question("¿Cúal es el corte c más frecuentemente utilizado en el modelo logit?",   
+             correct = "Correcto !, El punto en el que la probabilidad de la variable dependiente es igual a 0,5. Esto impica tener categorías de la variable dependiente balanceadas",   
+             allow_retry = TRUE,  
+             answer("El punto en el que la probabilidad de la variable dependiente es igual a 1.", message = "Cerca, pero no...intentalo de nuevo!"),  
+             answer("El punto en el que la probabilidad de la variable dependiente es igual a 0.", message = "Nop...intentalo de nuevo!"),  
+             answer("El punto en el que la probabilidad de la variable dependiente es igual a 0,5.", correct = TRUE),    
+             answer("El punto en el que la probabilidad de la variable dependiente es igual a -0,5." , message = "Incorrecto. Intenta de nuevo!."),
+             # Si no cambiamos estos textos en los botones, se mostrarán en Inglés    
+             submit_button = "Enviar respuesta",  
+             try_again_button = "Intentar de nuevo"),  
+    # Si no ponemos un caption aparecerá la palabra Quiz en inglés.  
+    caption = "Visualización"  
+)  
+```  
+
+
+### **Pregunta 4**  
+
+```{r quiz_4}  
+
+quiz(  
+    question("¿Cuál es la diferencia entre la regresión lineal y la regresión logística?",   
+             correct = "Correcto!, .",   
+             allow_retry = TRUE,  
+             answer("La regresión lineal se utiliza para predecir variables dependientes dicotómicas, mientras que la regresión logística se utiliza para predecir variables dependientes continuas.", message = "Cerca, pero no...intentalo de nuevo!"),  
+             answer(" La regresión lineal se utiliza para predecir variables dependientes continuas, mientras que la regresión logística se utiliza para predecir variables dependientes dicotómicas.", correct = TRUE), 
+             answer("La regresión lineal se utiliza para predecir variables dependientes ordinales, mientras que la regresión logística se utiliza para predecir variables dependientes nominales.", message = "Incorrecto. Intenta de nuevo!."),  
+             answer("La regresión lineal se utiliza para predecir variables dependientes categóricas, mientras que la regresión logística se utiliza para predecir variables dependientes numéricas.",  message = "Nop...intentalo de nuevo!"),  
+             # Si no cambiamos estos textos en los botones, se mostrarán en Inglés    
+             submit_button = "Enviar respuesta",  
+             try_again_button = "Intentar de nuevo"),  
+    # Si no ponemos un caption aparecerá la palabra Quiz en inglés.  
+    caption = "Visualización"  
+)  
+```  
+
+
+### **Pregunta 5**  
+
+```{r quiz_5}  
+
+quiz(  
+    question("¿Cómo se puede mejorar la bondad del ajuste de un modelo de regresión logística?",   
+             correct = "Correcto!, .",   
+             allow_retry = TRUE,  
+             answer("Se puede mejorar la bondad del ajuste de un modelo de regresión logística seleccionando las variables independientes más relevantes.", correct = TRUE),   
+             answer("Se puede mejorar la bondad del ajuste de un modelo de regresión logística seleccionando más variables independientes.", message = "No...intentalo de nuevo!"),  
+             answer("Se puede mejorar la bondad del ajuste de un modelo de regresión logística ajustando los parámetros del modelo sin seleccionar variables independientes.", message = "Incorrecto. Intenta de nuevo!."),  
+             answer("Se puede mejorar la bondad del ajuste de un modelo de regresión logística seleccionando menos variables independientes.", message = "Cerca, pero no...intentalo de nuevo!"), 
+             # Si no cambiamos estos textos en los botones, se mostrarán en Inglés    
+             submit_button = "Enviar respuesta",  
+             try_again_button = "Intentar de nuevo"),  
+    # Si no ponemos un caption aparecerá la palabra Quiz en inglés.  
+    caption = "Visualización"  
+)  
+```  
+
+
+### **Pregunta 6**  
+
+```{r quiz_6}  
+
+quiz(  
+    question("¿Cómo se puede utilizar la regresión logística para clasificar datos?",   
+             correct = "Respuesta y explicación!, .",   
+             allow_retry = TRUE,  
+             answer("Se puede utilizar la regresión logística para clasificar datos asignando a cada observación un valor de la variable dependiente que represente la clase a la que no pertenece.", message = "Cerca, pero no...intentalo de nuevo!"),  
+             answer("Se puede utilizar la regresión logística para clasificar datos asignando a cada observación un valor de la variable dependiente que represente la probabilidad de que pertenezca a ninguna clase. 2", message = "No...intentalo de nuevo!"),  
+             answer("Se puede utilizar la regresión logística para clasificar datos asignando a cada observación un valor de la variable dependiente que represente la clase a la que pertenece.", correct = TRUE),    
+             answer("Se puede utilizar la regresión logística para clasificar datos asignando a cada observación un valor de la variable dependiente que represente la probabilidad de que pertenezca a todas las clases.", message = "Incorrecto. Intenta de nuevo!."), 
+             # Si no cambiamos estos textos en los botones, se mostrarán en Inglés    
+             submit_button = "Enviar respuesta",  
+             try_again_button = "Intentar de nuevo"),  
+    # Si no ponemos un caption aparecerá la palabra Quiz en inglés.  
+    caption = "Visualización"  
+)  
+```  
+
+
+## **PROBLEMAS** 
+
+
+### **Problema 1** 
+
+Enunciado  
+
+```{r p1, exercise=TRUE, exercise.lines = 15}  
+
+
+```  
+
+
+```{r p1-hint}  
+
+
+```  
+
+
+```{r p1-solution}  
+
+```  
+
+
+
+### **Problema 2**  
+
+Enunciado  
+
+```{r p2, exercise=TRUE, exercise.lines = 15}  
+
+
+```  
+
+
+```{r p2-hint}  
+
+
+```  
+
+
+```{r p2-solution}  
+
+```  
+
+
+
+### **Problema 3**  
+
+Enunciado  
+
+```{r p3, exercise=TRUE, exercise.lines = 15}  
+
+
+```  
+
+
+```{r p3-hint}  
+
+
+```  
+
+
+```{r p3-solution}  
+
+```  
+
+
+
+### **Problema 4**  
+
+Enunciado  
+
+```{r p4, exercise=TRUE, exercise.lines = 15}  
+
+
+```  
+
+
+```{r p4-hint}  
+
+
+```  
+
+
+```{r p4-solution}  
+
+```  
+
+
+
+### **Problema 5**  
+
+Enunciado  
+
+```{r p5, exercise=TRUE, exercise.lines = 15}  
+
+
+```  
+
+
+```{r p5-hint}  
+
+
+```  
+
+
+```{r p5-solution}  
+
+```  
+

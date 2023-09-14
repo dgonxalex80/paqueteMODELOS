@@ -1,0 +1,193 @@
+---
+title: "**ESTIMACION DE MODELO DE REGRESIÓN LINEAL MULTIPLE**"
+author: Modelos Estadística para la toma de decisiones
+output: 
+  learnr::tutorial:
+    css: css/learnr_metadocencia.css
+    progressive: true # los encabezados de tercer nivel (###) son revelados progresivamente
+    allow_skip: true # permite saltearse los ejercicios. 
+    language:
+      es: tutorial_es.json
+description: "Tutorial interactivo conceptos básicos de probabilidad" # Esta descripción se ve en el panel Tutorial de RStudio 
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(paqueteMODELOS)
+library(boot)
+library(ggplot2)
+library(gridExtra)
+library(knitr)
+library(broom)
+library(stargazer)
+
+knitr::opts_chunk$set(echo = FALSE,
+                 exercise.warn_invisible = FALSE)
+# colores
+c1="#FF7F00" # NARANJA COLOR PRINCIPAL
+c2="#034a94" # AZUL FUERTE COLOR SECUNDARIO  
+c3="#0eb0c6" # AZUL CLARO COLOR TERCEARIO  
+c4="#686868" # GRIS COLOR TEXTO 
+##  <div class="content-box-blue">    </div> ## caja azul
+```
+
+## **PRESENTACIÓN**
+
+```{r, echo=FALSE, out.width="100%", fig.align = "center"}
+knitr::include_graphics("images/modulo1.png")
+```
+
+<br/>
+
+##### **Variable Dependiente Binaria**: 
+
+En el modelo logit, tienes una variable dependiente binaria, denotada comúnmente como \(Y\), que toma uno de dos valores posibles, generalmente 1 para el evento de interés (éxito) y 0 para el evento contrario (fracaso).
+
+<br/>
+
+##### **Función Logit**: 
+
+El corazón del modelo logit es la función logit, que relaciona la probabilidad de éxito con una combinación lineal de las variables independientes. La función logit se define como \( \ln\left(\frac{p}{1-p}\right) \), donde \(p\) es la probabilidad de éxito.
+
+<br/>
+
+##### **Variables Independientes**: 
+
+El modelo logit también incluye variables independientes (predictores o covariables), denotadas comúnmente como \(X\). Estas variables explicativas se utilizan para predecir la probabilidad de éxito.
+
+<br/>
+
+##### **Coeficientes del Modelo**: 
+
+El modelo logit estima coeficientes para cada variable independiente en la ecuación logit. Estos coeficientes indican cómo influyen las variables independientes en la probabilidad de éxito. Un coeficiente positivo aumenta la probabilidad de éxito, mientras que un coeficiente negativo la disminuye.
+
+<br/>
+
+##### **Probabilidad de Éxito**: 
+
+El modelo logit permite calcular la probabilidad estimada de éxito para cualquier conjunto dado de valores de las variables independientes utilizando la función logit inversa (también conocida como la función sigmoide): \(p = \frac{e^{\beta_0 + \beta_1X_1 + \beta_2X_2 + \ldots + \beta_kX_k}}{1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2 + \ldots + \beta_kX_k}}\).
+
+<br/>
+
+##### **Estimación de Parámetros**: 
+
+Los coeficientes \(\beta\) del modelo logit se estiman mediante técnicas estadísticas, como la máxima verosimilitud, para encontrar los valores que mejor ajustan los datos observados.
+
+<br/>
+
+##### **Bondad de Ajuste**: 
+
+La bondad de ajuste del modelo logit se evalúa utilizando diversas métricas, como la devianza, la pseudo R-cuadrada y el test de Wald, para determinar qué tan bien se ajusta el modelo a los datos.
+
+<br/>
+
+##### **Predicción y Clasificación**: 
+
+El modelo logit se utiliza comúnmente para predecir la probabilidad de que ocurra un evento y para clasificar observaciones en función de su probabilidad estimada. Se puede establecer un umbral para clasificar las observaciones en las categorías de éxito y fracaso.
+
+<br/>
+
+##### **Supuestos del Modelo**: 
+
+Los supuestos clave del modelo logit incluyen la linealidad en logit, la independencia de errores, la falta de colinealidad entre las variables independientes y la ausencia de valores atípicos.
+
+El modelo logit es ampliamente utilizado en diversas disciplinas, como la economía, la epidemiología, la ciencia política y la investigación de mercado, cuando se trata de analizar y predecir eventos binarios. Ayuda a comprender cómo las variables independientes afectan la probabilidad de ocurrencia de un evento particular.
+
+<br/><br/>
+
+#### **Modelo**
+
+<div class="content-box-blue">
+$$Y = \beta_{0} + \beta_{1}X_{1} + \varepsilon$$
+</div>
+
+Donde la variable $Y$ es una variable con dos categorías (binaria), la variable $X$ corresponde a una variable numérica y $\varepsilon$ corresponde a una variable aleatoria no observable.
+
+
+#### **Estimación**
+
+Su estimación se puede plantear de manera resumida como:
+
+
+<div class="content-box-blue">
+$$\ln \Bigg(\dfrac{P_{i}}{1-P_{i}} \Bigg) = \ln (Odds) =\beta_{0} + \beta_{1} \hspace{.2cm}x_{i} + \varepsilon_{i}^{*}$$
+
+<br/><br/>
+
+#### **Interpretación de los resultados**
+
+
+</br>
+
+* $\ln(odds) = \ln \Bigg(\dfrac{P_{i}}{1-P_{i}} \Bigg) = \ln \Bigg(\dfrac{P(Y=k|X=x)}{1-P(Y=k|X=x)}\Bigg)$
+
+</br>
+
+* $\ln \Bigg(\dfrac{1}{0}\Bigg) \hspace{.5cm}\text{si el caso se clasifica como exitoso}$
+
+</br>
+
+* $\ln \Bigg(\dfrac{0}{1}\Bigg) \hspace{.5cm}\text{si el caso se clasifica como fracaso}$
+
+</br></br>
+
+
+
+El resultado se puede interpretar como:
+
+</br>
+
+|    |                  |          |                                      |           |                |
+|:---|:-----------------|:---------|:-------------------------------------|-----------|:---------------|
+| Si |$P_{i} = 1-P_{i}$ | entonces |$\dfrac{P_{i}}{1-P_{i}} = Odds =1$,   | por tanto | $\ln(Odds) = 0$|     
+| Si | $P_{i} < 1-P_{i}$| entonces | $\dfrac{P_{i}}{1-P_{i}} = Odds < 1$,| por tanto | $\ln(Odds) < 0$|      
+| Si | $P_{i} > 1-P_{i}$| entonces | $\dfrac{P_{i}}{1-P_{i}} = Odds > 1$, | por tanto |$\ln(Odds) > 0$ |     
+
+
+
+</br></br>
+
+
+
+</br></br>
+
+#### **CÓDIGO R**
+
+| concepto                   | código                                             |
+|:---------------------------|:---------------------------------------------------|
+| balance de categorías      | `ovun.sample(y~., data=train, p=0.5, seed=1,method="over")$data` |
+| estimacion                 | `glm(y ~  x1 +x2 + x3, data = datos, family = binomial)`|
+| visualización resultados   | `summary(modelo)`                                  |
+| selección de variables     | `modelo_stepwise <- step(modelo_completo, direction = "forward")`|
+| predicción de y            | `predict(modelo, nuevos_datos, type = "response")` |
+| evaluación                 | `confusionMatrix(data, nivel_pronosticado, y)`     |
+| curva ROC                  | `roc(test$y, valor_pronosticado)`                  |
+| AUC                        | `auc(curva_ROC, levels =c(0,1), direction = "<")`  |
+
+## **PREGUNTAS**
+
+### **Pregunta 1**
+
+```{r quiz_1}
+
+quiz(
+  question("¿Pregunta?",
+           correct = "Respuesta y explicación!, .",
+           allow_retry = TRUE,
+           answer("opción 1", message = "Cerca, pero no...intentalo de nuevo!"),
+           answer("opción 2", message = "Nop...intentalo de nuevo!"),
+           answer("opción 3", message = "Incorrecto. Intenta de nuevo!."),
+           answer("opción 4", correct = TRUE),
+           # Si no cambiamos estos textos en los botones, se mostrarán en Inglés
+           submit_button = "Enviar respuesta",
+           try_again_button = "Intentar de nuevo"),
+  # Si no ponemos un caption aparecerá la palabra Quiz en inglés.
+  caption = "Visualización"
+)
+
+```
+
+
+
+

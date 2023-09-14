@@ -15,7 +15,7 @@
 <meta name="allow-skip" content="true" />
 <meta name="learnr-version-prerender" content="0.11.4" />
 
-<title>ESTIMACION DE MODELO DE REGRESIÓN LINEAL MULTIPLE</title>
+<title>MODELO LINEAL GENERAL</title>
 
 <!-- header-includes START -->
 <!-- HEAD_CONTENT -->
@@ -119,90 +119,189 @@ del modelo y sus supuestos, conceptos importante para la compresión los
 proceso relacionados con la inferencia realizada sobre los resultados
 obtenidos por el método de MCO.</p>
 <p></br></p>
-<div id="section-conceptos" class="section level4">
-<h4><strong>CONCEPTOS</strong></h4>
+<div id="section-conceptos" class="section level3">
+<h3><strong>CONCEPTOS</strong></h3>
+<div id="section-variable-dependiente-binaria" class="section level5">
+<h5><strong>Variable Dependiente Binaria</strong>:</h5>
+<p>En el modelo logit, tienes una variable dependiente binaria, denotada
+comúnmente como <span class="math inline">\(Y\)</span>, que toma uno de
+dos valores posibles, generalmente 1 para el evento de interés (éxito) y
+0 para el evento contrario (fracaso).</p>
 </div>
-<div id="section-método-de-estimación-mco" class="section level4">
-<h4><strong>Método de estimación MCO</strong></h4>
-<p>Método de optimización matemático que permite encontrar como solución
-los valores de los coeficientes del modelo de regresión múltiple que
-minimizan la suma de cuadrados de los errores. En forma matricial
-es:</p>
-<p><span class="math display">\[\widehat{\beta} = (X′X)^{-1}
-X′y\]</span></p>
+<div id="section-función-logit" class="section level5">
+<h5><strong>Función Logit</strong>:</h5>
+<p>El corazón del modelo logit es la función logit, que relaciona la
+probabilidad de éxito con una combinación lineal de las variables
+independientes. La función logit se define como <span
+class="math inline">\(\ln\left(\frac{p}{1-p}\right)\)</span>, donde
+<span class="math inline">\(p\)</span> es la probabilidad de éxito.</p>
 </div>
-<div id="section-propiedades-de-los-estimadores-mco"
-class="section level4">
-<h4><strong>Propiedades de los estimadores MCO</strong></h4>
-<p>Los estimadores de los coeficientes se distribuyen normal, con un
-vector de medias <span class="math inline">\(\beta\)</span> y matriz de
-varianzas-covarianzas <span class="math inline">\(\sigma^{2}
-(X′X)^{−1}\)</span>.</p>
-<p><span class="math display">\[\widehat{\beta} \sim N \Big( \beta
-,\sigma^{2} (X′X)^{−1} \Big)\]</span> Esto implica que los estimadores
-<span class="math inline">\(\widehat{\beta_{i}}\)</span> son:</p>
+<div id="section-variables-independientes" class="section level5">
+<h5><strong>Variables Independientes</strong>:</h5>
+<p>El modelo logit también incluye variables independientes (predictores
+o covariables), denotadas comúnmente como <span
+class="math inline">\(X\)</span>. Estas variables explicativas se
+utilizan para predecir la probabilidad de éxito.</p>
+</div>
+<div id="section-coeficientes-del-modelo" class="section level5">
+<h5><strong>Coeficientes del Modelo</strong>:</h5>
+<p>El modelo logit estima coeficientes para cada variable independiente
+en la ecuación logit. Estos coeficientes indican cómo influyen las
+variables independientes en la probabilidad de éxito. Un coeficiente
+positivo aumenta la probabilidad de éxito, mientras que un coeficiente
+negativo la disminuye.</p>
+</div>
+<div id="section-probabilidad-de-éxito" class="section level5">
+<h5><strong>Probabilidad de Éxito</strong>:</h5>
+<p>El modelo logit permite calcular la probabilidad estimada de éxito
+para cualquier conjunto dado de valores de las variables independientes
+utilizando la función logit inversa (también conocida como la función
+sigmoide): <span class="math inline">\(p = \frac{e^{\beta_0 + \beta_1X_1
++ \beta_2X_2 + \ldots + \beta_kX_k}}{1 + e^{\beta_0 + \beta_1X_1 +
+\beta_2X_2 + \ldots + \beta_kX_k}}\)</span>.</p>
+</div>
+<div id="section-estimación-de-parámetros" class="section level5">
+<h5><strong>Estimación de Parámetros</strong>:</h5>
+<p>Los coeficientes <span class="math inline">\(\beta\)</span> del
+modelo logit se estiman mediante técnicas estadísticas, como la máxima
+verosimilitud, para encontrar los valores que mejor ajustan los datos
+observados.</p>
+</div>
+<div id="section-bondad-de-ajuste" class="section level5">
+<h5><strong>Bondad de Ajuste</strong>:</h5>
+<p>La bondad de ajuste del modelo logit se evalúa utilizando diversas
+métricas, como la devianza, la pseudo R-cuadrada y el test de Wald, para
+determinar qué tan bien se ajusta el modelo a los datos.</p>
+</div>
+<div id="section-predicción-y-clasificación" class="section level5">
+<h5><strong>Predicción y Clasificación</strong>:</h5>
+<p>El modelo logit se utiliza comúnmente para predecir la probabilidad
+de que ocurra un evento y para clasificar observaciones en función de su
+probabilidad estimada. Se puede establecer un umbral para clasificar las
+observaciones en las categorías de éxito y fracaso.</p>
+</div>
+<div id="section-supuestos-del-modelo" class="section level5">
+<h5><strong>Supuestos del Modelo</strong>:</h5>
+<p>Los supuestos clave del modelo logit incluyen la linealidad en logit,
+la independencia de errores, la falta de colinealidad entre las
+variables independientes y la ausencia de valores atípicos.</p>
+<p>El modelo logit es ampliamente utilizado en diversas disciplinas,
+como la economía, la epidemiología, la ciencia política y la
+investigación de mercado, cuando se trata de analizar y predecir eventos
+binarios. Ayuda a comprender cómo las variables independientes afectan
+la probabilidad de ocurrencia de un evento particular.</p>
+<p><br/><br/></p>
+</div>
+</div>
+<div id="section-modelo" class="section level3">
+<h3><strong>Modelo</strong></h3>
+<p><span class="math display">\[Y = \beta_{0} + \beta_{1}X_{1} +
+\varepsilon\]</span></p>
+<p>Donde la variable <span class="math inline">\(Y\)</span> es una
+variable con dos categorías (binaria), la variable <span
+class="math inline">\(X\)</span> corresponde a una variable numérica y
+<span class="math inline">\(\varepsilon\)</span> corresponde a una
+variable aleatoria no observable.</p>
+<p><br/><br/></p>
+<div id="section-estimación" class="section level4">
+<h4><strong>Estimación</strong></h4>
+<p>Su estimación se puede plantear de manera resumida como:</p>
+<p><span class="math display">\[\ln \Bigg(\dfrac{P_{i}}{1-P_{i}} \Bigg)
+= \ln (Odds) =\beta_{0} + \beta_{1} \hspace{.2cm}x_{i} +
+\varepsilon_{i}^{*}\]</span></p>
+<p><br/><br/></p>
+</div>
+</div>
+<div id="section-interpretación-de-los-resultados"
+class="section level3">
+<h3><strong>Interpretación de los resultados</strong></h3>
+<p></br></p>
 <ul>
-<li>Insesgados</li>
-<li>Eficientes</li>
-<li>Se distribuyen normal</li>
+<li><span class="math inline">\(\ln(odds) = \ln
+\Bigg(\dfrac{P_{i}}{1-P_{i}} \Bigg) = \ln
+\Bigg(\dfrac{P(Y=k|X=x)}{1-P(Y=k|X=x)}\Bigg)\)</span></li>
 </ul>
-</div>
-<div id="section-inferencia-sobre-los-coeficientes"
-class="section level4">
-<h4><strong>Inferencia sobre los coeficientes</strong></h4>
-<p>Si los <span class="math inline">\(\widehat{\beta}_{i}\)</span> se
-distribuyen normal, entonces:</p>
-<p><span class="math display">\[
-{T_j} = {\frac{\widehat\beta_j -
-\beta_j}{\text{se}\left(\widehat\beta_j\right)} \sim t_{n - p}},
-\hspace{1cm} j = 0, 1, \ldots, k
-\]</span> y</p>
-<p>El intervalo de confianza para <span
-class="math inline">\(\beta_{i}\)</span> esta dado por :</p>
-<p><span class="math display">\[
-\widehat\beta_j \pm t_{\alpha/2, n - p}\,
-\text{se}\left(\widehat\beta_j\right)
-\]</span></p>
-<p>y el estadistico de prueba para <span class="math inline">\(Ho:
-\beta_{j} = B_{0}\)</span> vs <span class="math inline">\(Ho: \beta_{j}
-\neq B_{0}\)</span> es</p>
-<p><span class="math display">\[T_{j,0} = \dfrac{\widehat\beta_j -
-B_{j,0}}{\text{se}\left(\widehat\beta_j\right)} \overset{\text{bajo
-}H_0}{\sim} t_{v: n - p}\]</span></p>
-</div>
-<div id="section-inferencia-sobre-un-subconjunto-de-coeficientes"
-class="section level4">
-<h4><strong>Inferencia sobre un subconjunto de
-coeficientes</strong></h4>
-<p>En ocasiones es necesario realizar pruebas de hipótesis sobre un
-subconjunto de parámetros, en estos caso se utiliza la prueba F,
-comparando el modelo completo contra el modelo reducido.</p>
-</div>
-<div id="section-inferencia-sobre-pronósticos" class="section level4">
-<h4><strong>Inferencia sobre pronósticos</strong></h4>
-<p>El pronóstico de <span class="math inline">\(Y|x_{0}\)</span>, está
-dado por :</p>
-<p><span class="math display">\[\widehat{Y}_0 =
-\boldsymbol{x_0\widehat\beta} = \widehat\beta_0 + \widehat\beta_1x_{01}
-+ \widehat\beta_2x_{02} + \cdots + \widehat\beta_kx_{0k},\]</span> Se
-reemplaza los valores del vector <span
-class="math inline">\(x_{0}\)</span> en el modelo estimados</p>
-<p>Donde <span class="math inline">\(\widehat{Y}_0\)</span></p>
-<p><span class="math display">\[\widehat{Y}_0 \sim N\left(E\left[
-Y\vert\boldsymbol{x_0}\right],
-\sigma^2\,\boldsymbol{x_0}\left(\boldsymbol{X}&#39;\boldsymbol{X}\right)^{-1}\boldsymbol{x_0}&#39;\right)\]</span>
-y su intervalo de confianza está dado por :</p>
-<p><span class="math display">\[\widehat{y}_0 \pm t_{\alpha/2, n - p}
-\,\text{se}(\widehat{Y}_0).\]</span></p>
+<p></br></p>
+<ul>
+<li><span class="math inline">\(\ln \Bigg(\dfrac{1}{0}\Bigg)
+\hspace{.5cm}\text{si el caso se clasifica como exitoso}\)</span></li>
+</ul>
+<p></br></p>
+<ul>
+<li><span class="math inline">\(\ln \Bigg(\dfrac{0}{1}\Bigg)
+\hspace{.5cm}\text{si el caso se clasifica como fracaso}\)</span></li>
+</ul>
+<p></br></br></p>
+<p>El resultado se puede interpretar como:</p>
+<p></br></p>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="18%" />
+<col width="10%" />
+<col width="39%" />
+<col width="11%" />
+<col width="16%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td align="left">Si</td>
+<td align="left"><span class="math inline">\(P_{i} =
+1-P_{i}\)</span></td>
+<td align="left">entonces</td>
+<td align="left"><span class="math inline">\(\dfrac{P_{i}}{1-P_{i}} =
+Odds =1\)</span>,</td>
+<td>por tanto</td>
+<td align="left"><span class="math inline">\(\ln(Odds) = 0\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Si</td>
+<td align="left"><span class="math inline">\(P_{i} &lt;
+1-P_{i}\)</span></td>
+<td align="left">entonces</td>
+<td align="left"><span class="math inline">\(\dfrac{P_{i}}{1-P_{i}} =
+Odds &lt; 1\)</span>,</td>
+<td>por tanto</td>
+<td align="left"><span class="math inline">\(\ln(Odds) &lt;
+0\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Si</td>
+<td align="left"><span class="math inline">\(P_{i} &gt;
+1-P_{i}\)</span></td>
+<td align="left">entonces</td>
+<td align="left"><span class="math inline">\(\dfrac{P_{i}}{1-P_{i}} =
+Odds &gt; 1\)</span>,</td>
+<td>por tanto</td>
+<td align="left"><span class="math inline">\(\ln(Odds) &gt;
+0\)</span></td>
+</tr>
+</tbody>
+</table>
 <p></br></br></p>
 </div>
-<div id="section-mapa" class="section level4">
-<h4><strong>MAPA</strong></h4>
-<p><img src="images/mapa2.png" width="100%" style="display: block; margin: auto;" /></p>
+<div id="section-mapa" class="section level3">
+<h3><strong>MAPA</strong></h3>
 <p></br></br></p>
 </div>
-<div id="section-código-r" class="section level4">
-<h4><strong>CÓDIGO R</strong></h4>
+<div id="section-código-r" class="section level3">
+<h3><strong>CÓDIGO R</strong></h3>
 <table>
 <colgroup>
 <col width="35%" />
@@ -216,51 +315,42 @@ y su intervalo de confianza está dado por :</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">estimacion MCO</td>
+<td align="left">balance de categorías</td>
 <td
-align="left"><code>lm(y ~ x1 + x2 + x3 , data = namedata)</code></td>
+align="left"><code>ovun.sample(y~., data=train, p=0.5, seed=1,method="over")$data</code></td>
 </tr>
 <tr class="even">
-<td align="left">estimación Steppwise</td>
+<td align="left">estimacion</td>
 <td
-align="left"><code>modelo_b0&lt;- lm(y ~ 1, data=namedata)</code></td>
+align="left"><code>glm(y ~  x1 +x2 + x3, data = datos, family = binomial)</code></td>
 </tr>
 <tr class="odd">
-<td align="left"></td>
-<td
-align="left"><code>modelo_all &lt;- lm(y ~ x1 + x2 + x3, data=namedata)</code></td>
-</tr>
-<tr class="even">
-<td align="left">visualización de resultados</td>
+<td align="left">visualización resultados</td>
 <td align="left"><code>summary(modelo)</code></td>
 </tr>
-<tr class="odd">
-<td align="left">estimación paso a paso</td>
-<td
-align="left"><code>modelo_b0&lt;- lm(y ~ 1, data=namedata)</code></td>
-</tr>
 <tr class="even">
-<td align="left"></td>
+<td align="left">selección de variables</td>
 <td
-align="left"><code>modelo_all &lt;-lm(y ~ x1 + x2 + ... + xk, data=namedata)</code></td>
+align="left"><code>modelo_stepwise &lt;- step(modelo_completo, direction = "forward")</code></td>
 </tr>
 <tr class="odd">
-<td align="left"></td>
+<td align="left">predicción de y</td>
 <td
-align="left"><code>forward &lt;- step(modelo_b0, direction='forward', scope=formula(modelo_all), trace=0)</code></td>
+align="left"><code>predict(modelo, nuevos_datos, type = "response")</code></td>
 </tr>
 <tr class="even">
-<td align="left">predición de y</td>
-<td align="left"><code>predict(modelo)</code></td>
+<td align="left">evaluación</td>
+<td
+align="left"><code>confusionMatrix(data, nivel_pronosticado, y)</code></td>
 </tr>
 <tr class="odd">
-<td align="left"></td>
-<td
-align="left"><code>new_obs= data.frame(x1=#,x2=#,...,xk=#)</code></td>
+<td align="left">curva ROC</td>
+<td align="left"><code>roc(test$y, valor_pronosticado)</code></td>
 </tr>
 <tr class="even">
-<td align="left"></td>
-<td align="left"><code>predict(modelo, new_obs)</code></td>
+<td align="left">AUC</td>
+<td
+align="left"><code>auc(curva_ROC, levels =c(0,1), direction = "&lt;")</code></td>
 </tr>
 </tbody>
 </table>
@@ -270,46 +360,7 @@ align="left"><code>new_obs= data.frame(x1=#,x2=#,...,xk=#)</code></td>
 <h2><strong>CUESTIONARIO</strong></h2>
 <div id="section-pregunta-1" class="section level3">
 <h3><strong>Pregunta 1</strong></h3>
-<p>La base de datos vivienda, contenida en paqueteMOD, contiene
-variables cuantitativas :</p>
-<ul>
-<li><strong>preciom</strong> : precio de la vivienda</li>
-<li><strong>areaconst</strong> : area construida</li>
-<li><strong>parqueaderos</strong> : número de parqueaderos</li>
-<li><strong>banios</strong> : número de baños</li>
-<li><strong>habitaciones</strong> : número de habitaciones</li>
-<li><strong>zona</strong> : ubicación del apartamento</li>
-<li><strong>piso</strong> : piso de ubicación del apartamento</li>
-<li><strong>estrato</strong> : estrato socio económico donde se
-encuentra la vivienda</li>
-</ul>
-<p>A continuación se presenta los resultados de la estimacción MCO el
-modelo1 :</p>
-<pre><code>
-Call:
-lm(formula = preciom ~ areaconst + parqueaderos + banios + habitaciones, 
-    data = vivienda)
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--1654.58   -91.16   -20.30    58.99  1162.64 
-
-Coefficients:
-              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)   53.94826    7.51629   7.178 7.86e-13 ***
-areaconst      0.86155    0.02409  35.761  &lt; 2e-16 ***
-parqueaderos  94.99299    2.73594  34.720  &lt; 2e-16 ***
-banios        96.42470    2.62551  36.726  &lt; 2e-16 ***
-habitaciones -63.52121    2.23517 -28.419  &lt; 2e-16 ***
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-Residual standard error: 192.2 on 6712 degrees of freedom
-  (1605 observations deleted due to missingness)
-Multiple R-squared:  0.671, Adjusted R-squared:  0.6708 
-F-statistic:  3422 on 4 and 6712 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>No es posible afirmar :</p>
-<div class="panel-heading tutorial-quiz-title"></div>
+<div class="panel-heading tutorial-quiz-title">Visualización</div>
 <div class="panel panel-default tutorial-question-container">
 <div data-label="quiz_1-1" class="tutorial-question panel-body">
 <div id="quiz_1-1-answer_container" class="shiny-html-output"></div>
@@ -321,31 +372,7 @@ F-statistic:  3422 on 4 and 6712 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <div id="section-pregunta-2" class="section level3">
 <h3><strong>Pregunta 2</strong></h3>
-<p>Del siguiente procesamiento podemos afirmar:</p>
-<pre><code>
-Call:
-lm(formula = preciom ~ areaconst + parqueaderos + banios + habitaciones, 
-    data = vivienda)
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--1654.58   -91.16   -20.30    58.99  1162.64 
-
-Coefficients:
-              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)   53.94826    7.51629   7.178 7.86e-13 ***
-areaconst      0.86155    0.02409  35.761  &lt; 2e-16 ***
-parqueaderos  94.99299    2.73594  34.720  &lt; 2e-16 ***
-banios        96.42470    2.62551  36.726  &lt; 2e-16 ***
-habitaciones -63.52121    2.23517 -28.419  &lt; 2e-16 ***
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-Residual standard error: 192.2 on 6712 degrees of freedom
-  (1605 observations deleted due to missingness)
-Multiple R-squared:  0.671, Adjusted R-squared:  0.6708 
-F-statistic:  3422 on 4 and 6712 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="panel-heading tutorial-quiz-title"></div>
+<div class="panel-heading tutorial-quiz-title">Visualización</div>
 <div class="panel panel-default tutorial-question-container">
 <div data-label="quiz_2-1" class="tutorial-question panel-body">
 <div id="quiz_2-1-answer_container" class="shiny-html-output"></div>
@@ -357,9 +384,7 @@ F-statistic:  3422 on 4 and 6712 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <div id="section-pregunta-3" class="section level3">
 <h3><strong>Pregunta 3</strong></h3>
-<p>En un modelo de Regresión Lineal Múltiple es necesario que se cumpla
-el supuesto de normalidad de los errores :</p>
-<div class="panel-heading tutorial-quiz-title"></div>
+<div class="panel-heading tutorial-quiz-title">Visualización</div>
 <div class="panel panel-default tutorial-question-container">
 <div data-label="quiz_3-1" class="tutorial-question panel-body">
 <div id="quiz_3-1-answer_container" class="shiny-html-output"></div>
@@ -371,30 +396,6 @@ el supuesto de normalidad de los errores :</p>
 </div>
 <div id="section-pregunta-4" class="section level3">
 <h3><strong>Pregunta 4</strong></h3>
-<p>En la siguente estimación la variable tipo tiene dos posibles valores
-: Casa o Apartamento.</p>
-<pre><code>
-Call:
-lm(formula = preciom ~ parqueaderos + banios + tipo, data = vivienda)
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--1279.34  -103.37   -26.48    59.86  1253.52 
-
-Coefficients:
-             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  -116.204      6.798  -17.09   &lt;2e-16 ***
-parqueaderos  136.578      2.818   48.47   &lt;2e-16 ***
-banios        109.883      2.468   44.52   &lt;2e-16 ***
-tipoCasa      -62.911      6.095  -10.32   &lt;2e-16 ***
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-Residual standard error: 213 on 6713 degrees of freedom
-  (1605 observations deleted due to missingness)
-Multiple R-squared:  0.5962,    Adjusted R-squared:  0.596 
-F-statistic:  3303 on 3 and 6713 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>A partir de los anteriores resultados podemos afirmar:</p>
 <div class="panel-heading tutorial-quiz-title">Visualización</div>
 <div class="panel panel-default tutorial-question-container">
 <div data-label="quiz_4-1" class="tutorial-question panel-body">
@@ -404,129 +405,37 @@ F-statistic:  3303 on 3 and 6713 DF,  p-value: &lt; 2.2e-16</code></pre>
 <script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
 </div>
 </div>
-<!-- ### **Pregunta 5** -->
-<!-- ```{r quiz_5} -->
-<!-- quiz( -->
-<!--   question("¿Pregunta?",  -->
-<!--            correct = "Respuesta y explicación!, .",  -->
-<!--            allow_retry = TRUE, -->
-<!--            answer("opción 1", message = "Cerca, pero no...intentalo de nuevo!"), -->
-<!--            answer("opción 2", message = "Nop...intentalo de nuevo!"), -->
-<!--            answer("opción 3", message = "Incorrecto. Intenta de nuevo!."), -->
-<!--            answer("opción 4", correct = TRUE), -->
-<!--            # Si no cambiamos estos textos en los botones, se mostrarán en Inglés   -->
-<!--            submit_button = "Enviar respuesta", -->
-<!--            try_again_button = "Intentar de nuevo"), -->
-<!--   # Si no ponemos un caption aparecerá la palabra Quiz en inglés. -->
-<!--   caption = "Visualización" -->
-<!-- ) -->
-<!-- ``` -->
-<!-- ### **Pregunta 6** -->
-<!-- ```{r quiz_6} -->
-<!-- quiz( -->
-<!--   question("¿Pregunta?",  -->
-<!--            correct = "Respuesta y explicación!, .",  -->
-<!--            allow_retry = TRUE, -->
-<!--            answer("opción 1", message = "Cerca, pero no...intentalo de nuevo!"), -->
-<!--            answer("opción 2", message = "Nop...intentalo de nuevo!"), -->
-<!--            answer("opción 3", message = "Incorrecto. Intenta de nuevo!."), -->
-<!--            answer("opción 4", correct = TRUE), -->
-<!--            # Si no cambiamos estos textos en los botones, se mostrarán en Inglés   -->
-<!--            submit_button = "Enviar respuesta", -->
-<!--            try_again_button = "Intentar de nuevo"), -->
-<!--   # Si no ponemos un caption aparecerá la palabra Quiz en inglés. -->
-<!--   caption = "Visualización" -->
-<!-- ) -->
-<!-- ``` -->
-<!-- ### **Pregunta 7** -->
-<!-- ```{r quiz_7} -->
-<!-- quiz( -->
-<!--   question("¿Pregunta?",  -->
-<!--            correct = "Respuesta y explicación!, .",  -->
-<!--            allow_retry = TRUE, -->
-<!--            answer("opción 1", message = "Cerca, pero no...intentalo de nuevo!"), -->
-<!--            answer("opción 2", message = "Nop...intentalo de nuevo!"), -->
-<!--            answer("opción 3", message = "Incorrecto. Intenta de nuevo!."), -->
-<!--            answer("opción 4", correct = TRUE), -->
-<!--            # Si no cambiamos estos textos en los botones, se mostrarán en Inglés   -->
-<!--            submit_button = "Enviar respuesta", -->
-<!--            try_again_button = "Intentar de nuevo"), -->
-<!--   # Si no ponemos un caption aparecerá la palabra Quiz en inglés. -->
-<!--   caption = "Visualización" -->
-<!-- ) -->
-<!-- ``` -->
-<!-- ### **Pregunta 8** -->
-<!-- ```{r quiz_8} -->
-<!-- quiz( -->
-<!--   question("¿Pregunta?",  -->
-<!--            correct = "Respuesta y explicación!, .",  -->
-<!--            allow_retry = TRUE, -->
-<!--            answer("opción 1", message = "Cerca, pero no...intentalo de nuevo!"), -->
-<!--            answer("opción 2", message = "Nop...intentalo de nuevo!"), -->
-<!--            answer("opción 3", message = "Incorrecto. Intenta de nuevo!."), -->
-<!--            answer("opción 4", correct = TRUE), -->
-<!--            # Si no cambiamos estos textos en los botones, se mostrarán en Inglés   -->
-<!--            submit_button = "Enviar respuesta", -->
-<!--            try_again_button = "Intentar de nuevo"), -->
-<!--   # Si no ponemos un caption aparecerá la palabra Quiz en inglés. -->
-<!--   caption = "Visualización" -->
-<!-- ) -->
-<!-- ``` -->
-<!-- ### **Pregunta 9** -->
-<!-- ```{r quiz_9} -->
-<!-- quiz( -->
-<!--   question("¿Pregunta?",  -->
-<!--            correct = "Respuesta y explicación!, .",  -->
-<!--            allow_retry = TRUE, -->
-<!--            answer("opción 1", message = "Cerca, pero no...intentalo de nuevo!"), -->
-<!--            answer("opción 2", message = "Nop...intentalo de nuevo!"), -->
-<!--            answer("opción 3", message = "Incorrecto. Intenta de nuevo!."), -->
-<!--            answer("opción 4", correct = TRUE), -->
-<!--            # Si no cambiamos estos textos en los botones, se mostrarán en Inglés   -->
-<!--            submit_button = "Enviar respuesta", -->
-<!--            try_again_button = "Intentar de nuevo"), -->
-<!--   # Si no ponemos un caption aparecerá la palabra Quiz en inglés. -->
-<!--   caption = "Visualización" -->
-<!-- ) -->
-<!-- ``` -->
-<!-- ### **Pregunta 10** -->
-<!-- ```{r quiz_10} -->
-<!-- quiz( -->
-<!--   question("¿Pregunta?",  -->
-<!--            correct = "Respuesta y explicación!, .",  -->
-<!--            allow_retry = TRUE, -->
-<!--            answer("opción 1", message = "Cerca, pero no...intentalo de nuevo!"), -->
-<!--            answer("opción 2", message = "Nop...intentalo de nuevo!"), -->
-<!--            answer("opción 3", message = "Incorrecto. Intenta de nuevo!."), -->
-<!--            answer("opción 4", correct = TRUE), -->
-<!--            # Si no cambiamos estos textos en los botones, se mostrarán en Inglés   -->
-<!--            submit_button = "Enviar respuesta", -->
-<!--            try_again_button = "Intentar de nuevo"), -->
-<!--   # Si no ponemos un caption aparecerá la palabra Quiz en inglés. -->
-<!--   caption = "Visualización" -->
-<!-- ) -->
-<!-- ``` -->
+</div>
+<div id="section-pregunta-5" class="section level3">
+<h3><strong>Pregunta 5</strong></h3>
+<div class="panel-heading tutorial-quiz-title">Visualización</div>
+<div class="panel panel-default tutorial-question-container">
+<div data-label="quiz_5-1" class="tutorial-question panel-body">
+<div id="quiz_5-1-answer_container" class="shiny-html-output"></div>
+<div id="quiz_5-1-message_container" class="shiny-html-output"></div>
+<div id="quiz_5-1-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div>
+</div>
+<div id="section-pregunta-6" class="section level3">
+<h3><strong>Pregunta 6</strong></h3>
+<div class="panel-heading tutorial-quiz-title">Visualización</div>
+<div class="panel panel-default tutorial-question-container">
+<div data-label="quiz_6-1" class="tutorial-question panel-body">
+<div id="quiz_6-1-answer_container" class="shiny-html-output"></div>
+<div id="quiz_6-1-message_container" class="shiny-html-output"></div>
+<div id="quiz_6-1-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div>
 </div>
 </div>
 <div id="section-problemas" class="section level2">
 <h2><strong>PROBLEMAS</strong></h2>
 <div id="section-problema-1" class="section level3">
 <h3><strong>Problema 1</strong></h3>
-<p>La base de datos <code>vivienda</code>, contenida en
-<code>paqueteMOD</code>, contiene variables cuantitativas :</p>
-<ul>
-<li><strong>preciom</strong> : precio de la vivienda</li>
-<li><strong>areaconst</strong> : area construida</li>
-<li><strong>parqueaderos</strong> : número de parqueaderos</li>
-<li><strong>banios</strong> : número de baños</li>
-<li><strong>habitaciones</strong> : número de habitaciones</li>
-<li><strong>zona</strong> : ubicación del apartamento</li>
-<li><strong>piso</strong> : piso de ubicación del apartamento</li>
-<li><strong>estrato</strong> : estrato socio económico donde se
-encuentra la vivienda</li>
-</ul>
-<p>Calcule los estimadores para el modelo : preciom = areaconst +
-parqueaderos + banios + habitaciones</p>
+<p>Enunciado</p>
 <div class="tutorial-exercise" data-label="p1" data-completion="1"
 data-diagnostics="1" data-startover="1" data-lines="15">
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
@@ -534,296 +443,85 @@ data-diagnostics="1" data-startover="1" data-lines="15">
 <div class="tutorial-exercise-support" data-label="p1-hint"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
-<pre class="text"><code>library(paqueteMODELOS)
-data(&quot;vivienda&quot;)</code></pre>
+
 </div>
 <div class="tutorial-exercise-support" data-label="p1-solution"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
-<pre class="text"><code>library(paqueteMODELOS)
-data(vivienda)
-modelo1=lm(preciom ~ areaconst + parqueaderos + banios + habitaciones, data=vivienda)
-summary(modelo1)</code></pre>
+
 </div>
 </div>
 <div id="section-problema-2" class="section level3">
 <h3><strong>Problema 2</strong></h3>
-<p>La base de datos <code>vivienda</code>, contenida en
-<code>paqueteMOD</code>, contiene variables cuantitativas :</p>
-<ul>
-<li><strong>preciom</strong> : precio de la vivienda</li>
-<li><strong>areaconst</strong> : area construida</li>
-<li><strong>parqueaderos</strong> : número de parqueaderos</li>
-<li><strong>banios</strong> : número de baños</li>
-<li><strong>habitaciones</strong> : número de habitaciones</li>
-<li><strong>zona</strong> : ubicación del apartamento</li>
-<li><strong>piso</strong> : piso de ubicación del apartamento</li>
-<li><strong>estrato</strong> : estrato socio económico donde se
-encuentra la vivienda</li>
-</ul>
-<p>Cree las variable binarias necesarias para incorporar la variable
-estrato socio económico al modelo : preciom ~ parqueaderos + banios +
-habitaciones + tipo + estrato</p>
+<p>Enunciado</p>
 <div class="tutorial-exercise" data-label="p2" data-completion="1"
 data-diagnostics="1" data-startover="1" data-lines="15">
-<pre class="text"><code>library(paqueteMODELOS)
-data(vivienda)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <div class="tutorial-exercise-support" data-label="p2-hint"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
-<pre class="text"><code>library(paqueteMODELOS)
-data(vivienda)
-vivienda$E4&lt;-as.numeric(vivienda$estrato==4)  
-vivienda$E5&lt;-as.numeric(vivienda$estrato==5)  
-vivienda$E6&lt;-as.numeric(vivienda$estrato==6)  </code></pre>
+
 </div>
 <div class="tutorial-exercise-support" data-label="p2-solution"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
-<pre class="text"><code>library(paqueteMODELOS)
-data(vivienda)
-vivienda$E4&lt;-as.numeric(vivienda$estrato==4)  
-vivienda$E5&lt;-as.numeric(vivienda$estrato==5)  
-vivienda$E6&lt;-as.numeric(vivienda$estrato==6)  
-modelo2=lm(preciom ~ parqueaderos + banios + habitaciones + tipo + E4 + E5 + E6, data=vivienda)
-summary(modelo2)</code></pre>
+
 </div>
 </div>
 <div id="section-problema-3" class="section level3">
 <h3><strong>Problema 3</strong></h3>
-<p>La base de datos <code>vivienda</code>, contenida en
-<code>paqueteMOD</code>, contiene variables cuantitativas :</p>
-<ul>
-<li><strong>preciom</strong> : precio de la vivienda</li>
-<li><strong>areaconst</strong> : area construida</li>
-<li><strong>parqueaderos</strong> : número de parqueaderos</li>
-<li><strong>banios</strong> : número de baños</li>
-<li><strong>habitaciones</strong> : número de habitaciones</li>
-<li><strong>zona</strong> : ubicación del apartamento</li>
-<li><strong>piso</strong> : piso de ubicación del apartamento</li>
-<li><strong>estrato</strong> : estrato socio económico donde se
-encuentra la vivienda</li>
-</ul>
-<p>Realice una estimación del mejor modelo utilizando el método
-Steppwise (paso a paso)</p>
+<p>Enunciado</p>
 <div class="tutorial-exercise" data-label="p3" data-completion="1"
 data-diagnostics="1" data-startover="1" data-lines="15">
-<pre class="text"><code>library(paqueteMODELOS)
-data(vivienda)
-vivienda &lt;- na.omit(vivienda)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <div class="tutorial-exercise-support" data-label="p3-hint"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
-<pre class="text"><code>library(paqueteMODELOS)
-data(vivienda)
-vivienda &lt;- na.omit(vivienda)
-modelo_b0&lt;- lm(preciom ~ 1, data=vivienda) # modelo y= b0
-modelo_all &lt;- lm(preciom ~ parqueaderos + banios + habitaciones + tipo + estrato, data=vivienda) # modelo con todas las variables independientes</code></pre>
+
 </div>
 <div class="tutorial-exercise-support" data-label="p3-solution"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
-<pre class="text"><code>library(paqueteMODELOS)
-data(vivienda)
-vivienda &lt;- na.omit(vivienda)
-modelo_b0&lt;- lm(preciom ~ 1, data=vivienda) # modelo y= b0
-modelo_all &lt;- lm(preciom ~ parqueaderos + banios + habitaciones + tipo + estrato, data=vivienda) # modelo con todas las variables independientes
-forward &lt;- step(modelo_b0, direction=&#39;forward&#39;, scope=formula(modelo_all), trace=0)
-summary(forward)</code></pre>
+
 </div>
 </div>
 <div id="section-problema-4" class="section level3">
 <h3><strong>Problema 4</strong></h3>
-<p>La base de datos <code>vivienda</code>, contenida en
-<code>paqueteMOD</code>, contiene variables cuantitativas :</p>
-<ul>
-<li><strong>preciom</strong> : precio de la vivienda</li>
-<li><strong>areaconst</strong> : area construida</li>
-<li><strong>parqueaderos</strong> : número de parqueaderos</li>
-<li><strong>banios</strong> : número de baños</li>
-<li><strong>habitaciones</strong> : número de habitaciones</li>
-<li><strong>zona</strong> : ubicación del apartamento</li>
-<li><strong>piso</strong> : piso de ubicación del apartamento</li>
-<li><strong>estrato</strong> : estrato socio económico donde se
-encuentra la vivienda</li>
-</ul>
-<p>Realice una estimación de los coeficientes del modelo :
-<code>preciom ~ parqueaderos + banios + habitaciones + tipo + estrato</code></p>
-<p>Utilizando para ello el método de remuestreo bootstrapping</p>
+<p>Enunciado</p>
 <div class="tutorial-exercise" data-label="p4" data-completion="1"
-data-diagnostics="1" data-startover="1" data-lines="25">
-<pre class="text"><code>library(paqueteMODELOS)
-data(vivienda)
-vivienda &lt;- na.omit(vivienda)</code></pre>
+data-diagnostics="1" data-startover="1" data-lines="15">
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <div class="tutorial-exercise-support" data-label="p4-hint"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
-<pre class="text"><code>library(paqueteMODELOS)
-data(vivienda)
-vivienda &lt;- na.omit(vivienda)
-modelo1=lm(preciom ~ parqueaderos + banios + habitaciones , data=vivienda)</code></pre>
+
 </div>
 <div class="tutorial-exercise-support" data-label="p4-solution"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
-<pre class="text"><code>library(paqueteMODELOS)
-library(boot)
-library(ggplot2)
-library(gridExtra)
-data(vivienda)
-vivienda &lt;- na.omit(vivienda)
-modelo1=lm(preciom ~ parqueaderos + banios + habitaciones + tipo + estrato, data=vivienda)
 
-
-# Se define la función que devuelve los coeficientes de regresión
-fun_coeficientes &lt;- function(data, index){
-  return(coef(lm(preciom ~ parqueaderos + banios + habitaciones , data = vivienda, subset = index)))
-}
-beta_0 &lt;- rep(NA,9999)
-beta_1 &lt;- rep(NA,9999)
-beta_2 &lt;- rep(NA,9999)
-beta_3 &lt;- rep(NA,9999)
-
-for(i in 1:9999) {
-  coeficientes &lt;- fun_coeficientes(data = arboles1,
-                                   index = sample(1:90, 90, replace = TRUE))
-  beta_0[i] &lt;- coeficientes[1]
-  beta_1[i] &lt;- coeficientes[2]
-  beta_2[i] &lt;- coeficientes[3]
-  beta_3[i] &lt;- coeficientes[4]
-  }
-# Se grafica la distribución de los coeficientes
-p0 &lt;- ggplot(data = data.frame(beta_0 = beta_0), aes(beta_0)) +
-  geom_histogram(colour = &quot;firebrick3&quot;) + 
-  theme_bw()
-p1 &lt;- ggplot(data = data.frame(beta_1 = beta_1), aes(beta_1)) +
-  geom_histogram(colour = &quot;firebrick3&quot;) +
-  theme_bw()
-p2 &lt;- ggplot(data = data.frame(beta_2 = beta_2), aes(beta_2)) +
-  geom_histogram(colour = &quot;firebrick3&quot;) +
-  theme_bw()
-p3 &lt;- ggplot(data = data.frame(beta_3 = beta_3), aes(beta_3)) +
-  geom_histogram(colour = &quot;firebrick3&quot;) +
-  theme_bw()
-
-grid.arrange(p0,p1,p2, p3, ncol = 2, nrow=2,top = &quot;Bootstrap distribution de los coeficientes&quot;)
-#  se calcula la media de los coeficientes estimados
-betas_boot=data.frame(beta_0,  beta_1,beta_2, beta_3)
-apply(betas_boot, 2,mean)</code></pre>
 </div>
 </div>
 <div id="section-problema-5" class="section level3">
 <h3><strong>Problema 5</strong></h3>
-<p>La base de datos <code>vivienda</code>, contenida en
-<code>paqueteMOD</code>, contiene variables cuantitativas :</p>
-<ul>
-<li><strong>preciom</strong> : precio de la vivienda</li>
-<li><strong>areaconst</strong> : area construida</li>
-<li><strong>parqueaderos</strong> : número de parqueaderos</li>
-<li><strong>banios</strong> : número de baños</li>
-<li><strong>habitaciones</strong> : número de habitaciones</li>
-<li><strong>zona</strong> : ubicación del apartamento</li>
-<li><strong>piso</strong> : piso de ubicación del apartamento</li>
-<li><strong>estrato</strong> : estrato socio económico donde se
-encuentra la vivienda</li>
-</ul>
-<p>Compare los principales indicadores de ajustes de los modelos :</p>
-<ol style="list-style-type: decimal">
-<li><code>preciom ~ parqueaderos + banios + tipo</code></li>
-<li><code>preciom ~ parqueaderos + banios + tipo + estrato</code></li>
-<li><code>preciom ~ parqueaderos + banios + habitaciones + tipo + estrato</code></li>
-<li><code>preciom ~ parqueaderos + banios + habitaciones + areaconst + tipo + estrato</code></li>
-</ol>
+<p>Enunciado</p>
 <div class="tutorial-exercise" data-label="p5" data-completion="1"
 data-diagnostics="1" data-startover="1" data-lines="15">
-<pre class="text"><code>library(paqueteMODELOS)
-library(knitr)
-library(stargazer)
-data(vivienda)
-vivienda &lt;- na.omit(vivienda)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <div class="tutorial-exercise-support" data-label="p5-hint"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
-<pre class="text"><code>library(paqueteMODELOS)
-library(knitr)
-library(broom)
-library(stargazer)
-data(vivienda)
-vivienda &lt;- na.omit(vivienda)
-modelo1&lt;-lm(preciom ~ parqueaderos + banios +  tipo, data= vivienda)
-modelo2&lt;-lm(preciom ~ parqueaderos + banios + tipo + estrato, data=vivienda)
-modelo3&lt;-lm(preciom ~ parqueaderos + banios + habitaciones + tipo + estrato, data=vivienda)
-modelo4&lt;-lm(preciom ~ parqueaderos + banios + habitaciones + areaconst + tipo + estrato, data=vivienda)</code></pre>
+
 </div>
 <div class="tutorial-exercise-support" data-label="p5-solution"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
-<pre class="text"><code>library(paqueteMODELOS)
-library(knitr)
-library(broom)
-library(stargazer)
-data(vivienda)
-vivienda &lt;- na.omit(vivienda)
-modelo1&lt;-lm(preciom ~ parqueaderos + banios +  tipo, data= vivienda)
-modelo2&lt;-lm(preciom ~ parqueaderos + banios + tipo + estrato, data=vivienda)
-modelo3&lt;-lm(preciom ~ parqueaderos + banios + habitaciones + tipo + estrato, data=vivienda)
-modelo4&lt;-lm(preciom ~ parqueaderos + banios + habitaciones + areaconst + tipo + estrato, data=vivienda)
-#construcción de indicadores
-g1 &lt;- glance(modelo1)
-g2 &lt;- glance(modelo2)
-g3 &lt;- glance(modelo3)
-g4 &lt;- glance(modelo4)
 
-kable(rbind(g1, g2, g3, g4), digits = 2)</code></pre>
 </div>
-<!-- ### **Problema 6** -->
-<!-- Enunciado -->
-<!-- ```{r p6, exercise=TRUE, exercise.lines = 15} -->
-<!-- ``` -->
-<!-- ```{r p6-hint} -->
-<!-- ``` -->
-<!-- ```{r p6-solution} -->
-<!-- ``` -->
-<!-- ### **Problema 7** -->
-<!-- Enunciado -->
-<!-- ```{r p7, exercise=TRUE, exercise.lines = 15} -->
-<!-- ``` -->
-<!-- ```{r p7-hint} -->
-<!-- ``` -->
-<!-- ```{r p7-solution} -->
-<!-- ``` -->
-<!-- ### **Problema 8** -->
-<!-- Enunciado -->
-<!-- ```{r p8, exercise=TRUE, exercise.lines = 15} -->
-<!-- ``` -->
-<!-- ```{r p8-hint} -->
-<!-- ``` -->
-<!-- ```{r p8-solution} -->
-<!-- ``` -->
-<!-- ### **Problema 9** -->
-<!-- Enunciado -->
-<!-- ```{r p9, exercise=TRUE, exercise.lines = 15} -->
-<!-- ``` -->
-<!-- ```{r p9-hint} -->
-<!-- ``` -->
-<!-- ```{r p9-solution} -->
-<!-- ``` -->
-<!-- ### **Problema 10** -->
-<!-- Enunciado -->
-<!-- ```{r p10, exercise=TRUE, exercise.lines = 15} -->
-<!-- ``` -->
-<!-- ```{r p10-hint} -->
-<!-- ``` -->
-<!-- ```{r p10-solution} -->
-<!-- ``` -->
 <p>
 <script type="application/shiny-prerendered" data-context="server-start">
 library(learnr)
@@ -836,7 +534,7 @@ library(broom)
 library(stargazer)
 
 knitr::opts_chunk$set(echo = FALSE,
-                 exercise.warn_invisible = FALSE)
+exercise.warn_invisible = FALSE)
 # colores
 c1="#FF7F00" # NARANJA COLOR PRINCIPAL
 c2="#034a94" # AZUL FUERTE COLOR SECUNDARIO  
@@ -866,148 +564,221 @@ session$onSessionEnded(function() {
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz_1-1", question = structure("", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_cc5b72d", 
-    option = "Un parqueadero adicional, incrementa el precio de la vivienda en 130.6 millones ", 
-    value = "Un parqueadero adicional, incrementa el precio de la vivienda en 130.6 millones ", 
-    label = structure("Un parqueadero adicional, incrementa el precio de la vivienda en 130.6 millones", html = TRUE, class = c("html", 
-    "character")), correct = FALSE, message = structure("No…intentalo de nuevo!", html = TRUE, class = c("html", 
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz_1-1", question = structure("¿Cuáles son los requisitos entorno a las variables en un modelo regresión logística?", html = TRUE, class = c("html", 
+"character")), answers = list(structure(list(id = "lnr_ans_2461f8", 
+    option = "La variable dependiente debe ser dicotómica. Las variables independientes deben ser numéricas o categóricas. La relación entre las variables independientes y la variable dependiente debe ser lineal.", 
+    value = "La variable dependiente debe ser dicotómica. Las variables independientes deben ser numéricas o categóricas. La relación entre las variables independientes y la variable dependiente debe ser lineal.", 
+    label = structure("La variable dependiente debe ser dicotómica. Las variables independientes deben ser numéricas o categóricas. La relación entre las variables independientes y la variable dependiente debe ser lineal.", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = structure("Cerca, pero no…intentalo de nuevo!", html = TRUE, class = c("html", 
     "character")), type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_6e2367b", 
-    option = "Una habitación adicional vale 48.8 millones", 
-    value = "Una habitación adicional vale 48.8 millones", label = structure("Una habitación adicional vale 48.8 millones", html = TRUE, class = c("html", 
-    "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_1b9f5e6", 
-    option = "Cada metro cuadrado adicional de área construida incrementa la vivienda en $ 3 090", 
-    value = "Cada metro cuadrado adicional de área construida incrementa la vivienda en $ 3 090", 
-    label = structure("Cada metro cuadrado adicional de área construida incrementa la vivienda en $ 3 090", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_2bfaa01", 
+    option = "La variable dependiente debe ser continua. Las variables independientes pueden ser numéricas o categóricas. La relación entre las variables independientes y la variable dependiente no debe ser lineal.", 
+    value = "La variable dependiente debe ser continua. Las variables independientes pueden ser numéricas o categóricas. La relación entre las variables independientes y la variable dependiente no debe ser lineal.", 
+    label = structure("La variable dependiente debe ser continua. Las variables independientes pueden ser numéricas o categóricas. La relación entre las variables independientes y la variable dependiente no debe ser lineal.", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = structure("Nop…intentalo de nuevo!", html = TRUE, class = c("html", 
+    "character")), type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_cfa4311", 
+    option = "La variable dependiente debe ser continua. Las variables independientes pueden ser numéricas o categóricas. La relación entre las variables independientes y la variable dependiente debe ser lineal.", 
+    value = "La variable dependiente debe ser continua. Las variables independientes pueden ser numéricas o categóricas. La relación entre las variables independientes y la variable dependiente debe ser lineal.", 
+    label = structure("La variable dependiente debe ser continua. Las variables independientes pueden ser numéricas o categóricas. La relación entre las variables independientes y la variable dependiente debe ser lineal.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("Incorrecto. Intenta de nuevo!.", html = TRUE, class = c("html", 
     "character")), type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_64fec49", 
-    option = "La razón por la que el coeficiente tenga un valor negativo, es que una vivenda por lo menos tiene un baño y una habitación y su área construida es superior a 30 m2", 
-    value = "La razón por la que el coeficiente tenga un valor negativo, es que una vivenda por lo menos tiene un baño y una habitación y su área construida es superior a 30 m2", 
-    label = structure("La razón por la que el coeficiente tenga un valor negativo, es que una vivenda por lo menos tiene un baño y una habitación y su área construida es superior a 30 m2", html = TRUE, class = c("html", 
-    "character")), correct = FALSE, message = structure("No…intentalo de nuevo!", html = TRUE, class = c("html", 
-    "character")), type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_edaf2b8", 
+    option = "La variable dependiente debe ser dicotómica. Las variables independientes pueden ser numéricas o categóricas. La relación entre las variables independientes y la variable dependiente debe ser lineal.", 
+    value = "La variable dependiente debe ser dicotómica. Las variables independientes pueden ser numéricas o categóricas. La relación entre las variables independientes y la variable dependiente debe ser lineal.", 
+    label = structure("La variable dependiente debe ser dicotómica. Las variables independientes pueden ser numéricas o categóricas. La relación entre las variables independientes y la variable dependiente debe ser lineal.", html = TRUE, class = c("html", 
+    "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
 "tutorial_quiz_answer"))), button_labels = list(submit = structure("Enviar respuesta", html = TRUE, class = c("html", 
 "character")), try_again = structure("Intentar de nuevo", html = TRUE, class = c("html", 
-"character"))), messages = list(correct = structure("Correcto!.El valor de la pendiente estimada es -41.83 , que corresponde al ajuste que hace el modelo cuando se adiciona una habitacion más a la vivienda", html = TRUE, class = c("html", 
+"character"))), messages = list(correct = structure("Correcto!, .", html = TRUE, class = c("html", 
 "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz_1-1-answer", question = "quiz_1-1"), loading = NULL, 
-    random_answer_order = FALSE, allow_retry = TRUE, seed = 942046367.561325, 
+    random_answer_order = FALSE, allow_retry = TRUE, seed = 1331684418.37989, 
     options = list()), class = c("learnr_radio", "tutorial_question"
 )), session = session)
 </script>
 
 
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz_2-1", question = structure("¿Pregunta?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_b5c5114", 
-    option = "El valor del estadístico F, indica que el modelo no es adecuado para la estimación del precio", 
-    value = "El valor del estadístico F, indica que el modelo no es adecuado para la estimación del precio", 
-    label = structure("El valor del estadístico F, indica que el modelo no es adecuado para la estimación del precio", html = TRUE, class = c("html", 
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz_2-1", question = structure("¿Cuál es la función de probabilidad utilizada en el modelo logit?", html = TRUE, class = c("html", 
+"character")), answers = list(structure(list(id = "lnr_ans_e3ee345", 
+    option = "función logaritmica", value = "función logaritmica", 
+    label = structure("función logaritmica", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("Cerca, pero no…intentalo de nuevo!", html = TRUE, class = c("html", 
     "character")), type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_d05804b", 
-    option = "El valor de R2 indica que el modelo es apropiado para la explicación de la variabilidad del precio", 
-    value = "El valor de R2 indica que el modelo es apropiado para la explicación de la variabilidad del precio", 
-    label = structure("El valor de R2 indica que el modelo es apropiado para la explicación de la variabilidad del precio", html = TRUE, class = c("html", 
-    "character")), correct = FALSE, message = structure("No…intentalo de nuevo!", html = TRUE, class = c("html", 
-    "character")), type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_bfd5856", 
-    option = "El valor-p correspondeinte a la prueba de significancia individual para la variable regresora areaconst indica que su valor no es significativo estadñísticamente", 
-    value = "El valor-p correspondeinte a la prueba de significancia individual para la variable regresora areaconst indica que su valor no es significativo estadñísticamente", 
-    label = structure("El valor-p correspondeinte a la prueba de significancia individual para la variable regresora areaconst indica que su valor no es significativo estadñísticamente", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_9f9457c", 
+    option = "función logística", value = "función logística", 
+    label = structure("función logística", html = TRUE, class = c("html", 
+    "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_720fc6f", 
+    option = "función normal", value = "función normal", label = structure("función normal", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("Incorrecto. Intenta de nuevo!.", html = TRUE, class = c("html", 
     "character")), type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_6b105e5", 
-    option = "El modelo  explica un 60.85% de la variabilidad del precio", 
-    value = "El modelo  explica un 60.85% de la variabilidad del precio", 
-    label = structure("El modelo  explica un 60.85% de la variabilidad del precio", html = TRUE, class = c("html", 
-    "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_7e486f4", 
+    option = "función exponencial", value = "función exponencial", 
+    label = structure("función exponencial", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = structure("Nop…intentalo de nuevo!", html = TRUE, class = c("html", 
+    "character")), type = "literal"), class = c("tutorial_question_answer", 
 "tutorial_quiz_answer"))), button_labels = list(submit = structure("Enviar respuesta", html = TRUE, class = c("html", 
 "character")), try_again = structure("Intentar de nuevo", html = TRUE, class = c("html", 
-"character"))), messages = list(correct = structure("Correcto!", html = TRUE, class = c("html", 
+"character"))), messages = list(correct = structure("Correcto. La función logística se utiliza para modelar la probabilidad en el modelo logit. Esta función tiene forma de S.", html = TRUE, class = c("html", 
 "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz_2-1-answer", question = "quiz_2-1"), loading = NULL, 
-    random_answer_order = FALSE, allow_retry = TRUE, seed = 1567507522.27007, 
+    random_answer_order = FALSE, allow_retry = TRUE, seed = 943772852.060521, 
     options = list()), class = c("learnr_radio", "tutorial_question"
 )), session = session)
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz_3-1", question = structure("", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_8d9f16", 
-    option = "Para poder que el método de MCO encuentre una solución única ", 
-    value = "Para poder que el método de MCO encuentre una solución única ", 
-    label = structure("Para poder que el método de MCO encuentre una solución única", html = TRUE, class = c("html", 
-    "character")), correct = FALSE, message = structure("No…intentalo de nuevo!", html = TRUE, class = c("html", 
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz_3-1", question = structure("¿Cúal es el corte c más frecuentemente utilizado en el modelo logit?", html = TRUE, class = c("html", 
+"character")), answers = list(structure(list(id = "lnr_ans_7a37ad1", 
+    option = "El punto en el que la probabilidad de la variable dependiente es igual a 1.", 
+    value = "El punto en el que la probabilidad de la variable dependiente es igual a 1.", 
+    label = structure("El punto en el que la probabilidad de la variable dependiente es igual a 1.", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = structure("Cerca, pero no…intentalo de nuevo!", html = TRUE, class = c("html", 
     "character")), type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_2d12619", 
-    option = "Poder encontrar el valor de la variable respuesta,  dado un conjunto de valores de las variables regresoras", 
-    value = "Poder encontrar el valor de la variable respuesta,  dado un conjunto de valores de las variables regresoras", 
-    label = structure("Poder encontrar el valor de la variable respuesta,  dado un conjunto de valores de las variables regresoras", html = TRUE, class = c("html", 
-    "character")), correct = FALSE, message = structure("No…intentalo de nuevo!", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_a217cbf", 
+    option = "El punto en el que la probabilidad de la variable dependiente es igual a 0.", 
+    value = "El punto en el que la probabilidad de la variable dependiente es igual a 0.", 
+    label = structure("El punto en el que la probabilidad de la variable dependiente es igual a 0.", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = structure("Nop…intentalo de nuevo!", html = TRUE, class = c("html", 
     "character")), type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_127872d", 
-    option = "Poder realizar inferencias sobre los coeficientes y la variable respuesta", 
-    value = "Poder realizar inferencias sobre los coeficientes y la variable respuesta", 
-    label = structure("Poder realizar inferencias sobre los coeficientes y la variable respuesta", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_e75d0de", 
+    option = "El punto en el que la probabilidad de la variable dependiente es igual a 0,5.", 
+    value = "El punto en el que la probabilidad de la variable dependiente es igual a 0,5.", 
+    label = structure("El punto en el que la probabilidad de la variable dependiente es igual a 0,5.", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_a9d45da", 
-    option = "Poder obtener un valor mayor del R2", value = "Poder obtener un valor mayor del R2", 
-    label = structure("Poder obtener un valor mayor del R2", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_e2556a3", 
+    option = "El punto en el que la probabilidad de la variable dependiente es igual a -0,5.", 
+    value = "El punto en el que la probabilidad de la variable dependiente es igual a -0,5.", 
+    label = structure("El punto en el que la probabilidad de la variable dependiente es igual a -0,5.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("Incorrecto. Intenta de nuevo!.", html = TRUE, class = c("html", 
     "character")), type = "literal"), class = c("tutorial_question_answer", 
 "tutorial_quiz_answer"))), button_labels = list(submit = structure("Enviar respuesta", html = TRUE, class = c("html", 
 "character")), try_again = structure("Intentar de nuevo", html = TRUE, class = c("html", 
-"character"))), messages = list(correct = structure("Correcto!. Es necesario este supuesto para que la distribución de los estimadores de los coeficientes  y el estimador de Y, se distribuyan t-Student. Distribución base para la construcción de los intervalos de confianza y los estadístos de prueba asociados con las pruebas de hipótesis asociados", html = TRUE, class = c("html", 
+"character"))), messages = list(correct = structure("Correcto !, El punto en el que la probabilidad de la variable dependiente es igual a 0,5. Esto impica tener categorías de la variable dependiente balanceadas", html = TRUE, class = c("html", 
 "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz_3-1-answer", question = "quiz_3-1"), loading = NULL, 
-    random_answer_order = FALSE, allow_retry = TRUE, seed = 1573771121.76716, 
+    random_answer_order = FALSE, allow_retry = TRUE, seed = 1183749586.44877, 
     options = list()), class = c("learnr_radio", "tutorial_question"
 )), session = session)
 </script>
 
 
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz_4-1", question = structure("", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_51ac1a0", 
-    option = "Todas las casas tienen un mayor valor que todos los apartamento", 
-    value = "Todas las casas tienen un mayor valor que todos los apartamento", 
-    label = structure("Todas las casas tienen un mayor valor que todos los apartamento", html = TRUE, class = c("html", 
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz_4-1", question = structure("¿Cuál es la diferencia entre la regresión lineal y la regresión logística?", html = TRUE, class = c("html", 
+"character")), answers = list(structure(list(id = "lnr_ans_6065bc8", 
+    option = "La regresión lineal se utiliza para predecir variables dependientes dicotómicas, mientras que la regresión logística se utiliza para predecir variables dependientes continuas.", 
+    value = "La regresión lineal se utiliza para predecir variables dependientes dicotómicas, mientras que la regresión logística se utiliza para predecir variables dependientes continuas.", 
+    label = structure("La regresión lineal se utiliza para predecir variables dependientes dicotómicas, mientras que la regresión logística se utiliza para predecir variables dependientes continuas.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("Cerca, pero no…intentalo de nuevo!", html = TRUE, class = c("html", 
     "character")), type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_995ced7", 
-    option = "Todas las casas tienen un inferior  que todos los apartamentos", 
-    value = "Todas las casas tienen un inferior  que todos los apartamentos", 
-    label = structure("Todas las casas tienen un inferior  que todos los apartamentos", html = TRUE, class = c("html", 
-    "character")), correct = FALSE, message = structure("Nop…intentalo de nuevo!", html = TRUE, class = c("html", 
-    "character")), type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_6130183", 
-    option = "Algunas casas pueden tener un valor superior a algunos apartamentos ", 
-    value = "Algunas casas pueden tener un valor superior a algunos apartamentos ", 
-    label = structure("Algunas casas pueden tener un valor superior a algunos apartamentos", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_2a1b37e", 
+    option = " La regresión lineal se utiliza para predecir variables dependientes continuas, mientras que la regresión logística se utiliza para predecir variables dependientes dicotómicas.", 
+    value = " La regresión lineal se utiliza para predecir variables dependientes continuas, mientras que la regresión logística se utiliza para predecir variables dependientes dicotómicas.", 
+    label = structure("La regresión lineal se utiliza para predecir variables dependientes continuas, mientras que la regresión logística se utiliza para predecir variables dependientes dicotómicas.", html = TRUE, class = c("html", 
+    "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_e9d708e", 
+    option = "La regresión lineal se utiliza para predecir variables dependientes ordinales, mientras que la regresión logística se utiliza para predecir variables dependientes nominales.", 
+    value = "La regresión lineal se utiliza para predecir variables dependientes ordinales, mientras que la regresión logística se utiliza para predecir variables dependientes nominales.", 
+    label = structure("La regresión lineal se utiliza para predecir variables dependientes ordinales, mientras que la regresión logística se utiliza para predecir variables dependientes nominales.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("Incorrecto. Intenta de nuevo!.", html = TRUE, class = c("html", 
     "character")), type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_937403", 
-    option = "Ninguna de las anteriores", value = "Ninguna de las anteriores", 
-    label = structure("Ninguna de las anteriores", html = TRUE, class = c("html", 
-    "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_df91a51", 
+    option = "La regresión lineal se utiliza para predecir variables dependientes categóricas, mientras que la regresión logística se utiliza para predecir variables dependientes numéricas.", 
+    value = "La regresión lineal se utiliza para predecir variables dependientes categóricas, mientras que la regresión logística se utiliza para predecir variables dependientes numéricas.", 
+    label = structure("La regresión lineal se utiliza para predecir variables dependientes categóricas, mientras que la regresión logística se utiliza para predecir variables dependientes numéricas.", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = structure("Nop…intentalo de nuevo!", html = TRUE, class = c("html", 
+    "character")), type = "literal"), class = c("tutorial_question_answer", 
 "tutorial_quiz_answer"))), button_labels = list(submit = structure("Enviar respuesta", html = TRUE, class = c("html", 
 "character")), try_again = structure("Intentar de nuevo", html = TRUE, class = c("html", 
-"character"))), messages = list(correct = structure("Correcto!, El valor -62.9 indica que una casa tiene un valor de 62.9 millones menos que un apartamento, bajo el supuesto que todas las demás variables son constantes.", html = TRUE, class = c("html", 
+"character"))), messages = list(correct = structure("Correcto!, .", html = TRUE, class = c("html", 
 "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz_4-1-answer", question = "quiz_4-1"), loading = NULL, 
-    random_answer_order = FALSE, allow_retry = TRUE, seed = 34499978.4839347, 
+    random_answer_order = FALSE, allow_retry = TRUE, seed = 393803313.816621, 
+    options = list()), class = c("learnr_radio", "tutorial_question"
+)), session = session)
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz_5-1", question = structure("¿Cómo se puede mejorar la bondad del ajuste de un modelo de regresión logística?", html = TRUE, class = c("html", 
+"character")), answers = list(structure(list(id = "lnr_ans_e43805f", 
+    option = "Se puede mejorar la bondad del ajuste de un modelo de regresión logística seleccionando las variables independientes más relevantes.", 
+    value = "Se puede mejorar la bondad del ajuste de un modelo de regresión logística seleccionando las variables independientes más relevantes.", 
+    label = structure("Se puede mejorar la bondad del ajuste de un modelo de regresión logística seleccionando las variables independientes más relevantes.", html = TRUE, class = c("html", 
+    "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_cc22e84", 
+    option = "Se puede mejorar la bondad del ajuste de un modelo de regresión logística seleccionando más variables independientes.", 
+    value = "Se puede mejorar la bondad del ajuste de un modelo de regresión logística seleccionando más variables independientes.", 
+    label = structure("Se puede mejorar la bondad del ajuste de un modelo de regresión logística seleccionando más variables independientes.", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = structure("No…intentalo de nuevo!", html = TRUE, class = c("html", 
+    "character")), type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_c2dfaf2", 
+    option = "Se puede mejorar la bondad del ajuste de un modelo de regresión logística ajustando los parámetros del modelo sin seleccionar variables independientes.", 
+    value = "Se puede mejorar la bondad del ajuste de un modelo de regresión logística ajustando los parámetros del modelo sin seleccionar variables independientes.", 
+    label = structure("Se puede mejorar la bondad del ajuste de un modelo de regresión logística ajustando los parámetros del modelo sin seleccionar variables independientes.", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = structure("Incorrecto. Intenta de nuevo!.", html = TRUE, class = c("html", 
+    "character")), type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_d337207", 
+    option = "Se puede mejorar la bondad del ajuste de un modelo de regresión logística seleccionando menos variables independientes.", 
+    value = "Se puede mejorar la bondad del ajuste de un modelo de regresión logística seleccionando menos variables independientes.", 
+    label = structure("Se puede mejorar la bondad del ajuste de un modelo de regresión logística seleccionando menos variables independientes.", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = structure("Cerca, pero no…intentalo de nuevo!", html = TRUE, class = c("html", 
+    "character")), type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer"))), button_labels = list(submit = structure("Enviar respuesta", html = TRUE, class = c("html", 
+"character")), try_again = structure("Intentar de nuevo", html = TRUE, class = c("html", 
+"character"))), messages = list(correct = structure("Correcto!, .", html = TRUE, class = c("html", 
+"character")), try_again = structure("Incorrect", html = TRUE, class = c("html", 
+"character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
+"character")), message = NULL, post_message = NULL), ids = list(
+    answer = "quiz_5-1-answer", question = "quiz_5-1"), loading = NULL, 
+    random_answer_order = FALSE, allow_retry = TRUE, seed = 1440977124.82899, 
+    options = list()), class = c("learnr_radio", "tutorial_question"
+)), session = session)
+</script>
+
+
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz_6-1", question = structure("¿Cómo se puede utilizar la regresión logística para clasificar datos?", html = TRUE, class = c("html", 
+"character")), answers = list(structure(list(id = "lnr_ans_e2affd3", 
+    option = "Se puede utilizar la regresión logística para clasificar datos asignando a cada observación un valor de la variable dependiente que represente la clase a la que no pertenece.", 
+    value = "Se puede utilizar la regresión logística para clasificar datos asignando a cada observación un valor de la variable dependiente que represente la clase a la que no pertenece.", 
+    label = structure("Se puede utilizar la regresión logística para clasificar datos asignando a cada observación un valor de la variable dependiente que represente la clase a la que no pertenece.", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = structure("Cerca, pero no…intentalo de nuevo!", html = TRUE, class = c("html", 
+    "character")), type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_be00464", 
+    option = "Se puede utilizar la regresión logística para clasificar datos asignando a cada observación un valor de la variable dependiente que represente la probabilidad de que pertenezca a ninguna clase. 2", 
+    value = "Se puede utilizar la regresión logística para clasificar datos asignando a cada observación un valor de la variable dependiente que represente la probabilidad de que pertenezca a ninguna clase. 2", 
+    label = structure("Se puede utilizar la regresión logística para clasificar datos asignando a cada observación un valor de la variable dependiente que represente la probabilidad de que pertenezca a ninguna clase. 2", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = structure("No…intentalo de nuevo!", html = TRUE, class = c("html", 
+    "character")), type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_a4ad7b3", 
+    option = "Se puede utilizar la regresión logística para clasificar datos asignando a cada observación un valor de la variable dependiente que represente la clase a la que pertenece.", 
+    value = "Se puede utilizar la regresión logística para clasificar datos asignando a cada observación un valor de la variable dependiente que represente la clase a la que pertenece.", 
+    label = structure("Se puede utilizar la regresión logística para clasificar datos asignando a cada observación un valor de la variable dependiente que represente la clase a la que pertenece.", html = TRUE, class = c("html", 
+    "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_fa3185a", 
+    option = "Se puede utilizar la regresión logística para clasificar datos asignando a cada observación un valor de la variable dependiente que represente la probabilidad de que pertenezca a todas las clases.", 
+    value = "Se puede utilizar la regresión logística para clasificar datos asignando a cada observación un valor de la variable dependiente que represente la probabilidad de que pertenezca a todas las clases.", 
+    label = structure("Se puede utilizar la regresión logística para clasificar datos asignando a cada observación un valor de la variable dependiente que represente la probabilidad de que pertenezca a todas las clases.", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = structure("Incorrecto. Intenta de nuevo!.", html = TRUE, class = c("html", 
+    "character")), type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer"))), button_labels = list(submit = structure("Enviar respuesta", html = TRUE, class = c("html", 
+"character")), try_again = structure("Intentar de nuevo", html = TRUE, class = c("html", 
+"character"))), messages = list(correct = structure("Respuesta y explicación!, .", html = TRUE, class = c("html", 
+"character")), try_again = structure("Incorrect", html = TRUE, class = c("html", 
+"character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
+"character")), message = NULL, post_message = NULL), ids = list(
+    answer = "quiz_6-1-answer", question = "quiz_6-1"), loading = NULL, 
+    random_answer_order = FALSE, allow_retry = TRUE, seed = 39392518.9816564, 
     options = list()), class = c("learnr_radio", "tutorial_question"
 )), session = session)
 </script>
@@ -1024,24 +795,23 @@ output$`tutorial-exercise-p1-output` <- renderUI({
 learnr:::store_exercise_cache(structure(list(label = "p1", global_setup = structure(c("library(learnr)", 
 "library(paqueteMODELOS)", "library(boot)", "library(ggplot2)", 
 "library(gridExtra)", "library(knitr)", "library(broom)", "library(stargazer)", 
-"", "knitr::opts_chunk$set(echo = FALSE,", "                 exercise.warn_invisible = FALSE)", 
+"", "knitr::opts_chunk$set(echo = FALSE,", "exercise.warn_invisible = FALSE)", 
 "# colores", "c1=\"#FF7F00\" # NARANJA COLOR PRINCIPAL", "c2=\"#034a94\" # AZUL FUERTE COLOR SECUNDARIO  ", 
 "c3=\"#0eb0c6\" # AZUL CLARO COLOR TERCEARIO  ", "c4=\"#686868\" # GRIS COLOR TEXTO ", 
 "##  <div class=\"content-box-blue\">    <\u002fdiv> ## caja azul"
 ), chunk_opts = list(label = "setup", include = FALSE)), setup = NULL, 
-    chunks = list(list(label = "p1", code = "", opts = list(label = "\"p1\"", 
-        exercise = "TRUE", exercise.lines = "15"), engine = "r")), 
-    code_check = NULL, error_check = NULL, check = NULL, solution = structure(c("library(paqueteMODELOS)", 
-    "data(vivienda)", "modelo1=lm(preciom ~ areaconst + parqueaderos + banios + habitaciones, data=vivienda)", 
-    "summary(modelo1)"), chunk_opts = list(label = "p1-solution")), 
-    tests = NULL, options = list(eval = FALSE, echo = TRUE, results = "markup", 
-        tidy = FALSE, tidy.opts = NULL, collapse = FALSE, prompt = FALSE, 
-        comment = NA, highlight = FALSE, size = "normalsize", 
-        background = "#F7F7F7", strip.white = TRUE, cache = 0, 
-        cache.path = "Tutorial202_cache/html/", cache.vars = NULL, 
-        cache.lazy = TRUE, dependson = NULL, autodep = FALSE, 
-        cache.rebuild = FALSE, fig.keep = "high", fig.show = "asis", 
-        fig.align = "default", fig.path = "Tutorial202_files/figure-html/", 
+    chunks = list(list(label = "p1", code = "\n", opts = list(
+        label = "\"p1\"", exercise = "TRUE", exercise.lines = "15"), 
+        engine = "r")), code_check = NULL, error_check = NULL, 
+    check = NULL, solution = structure("", chunk_opts = list(
+        label = "p1-solution")), tests = NULL, options = list(
+        eval = FALSE, echo = TRUE, results = "markup", tidy = FALSE, 
+        tidy.opts = NULL, collapse = FALSE, prompt = FALSE, comment = NA, 
+        highlight = FALSE, size = "normalsize", background = "#F7F7F7", 
+        strip.white = TRUE, cache = 0, cache.path = "Tutorial301_cache/html/", 
+        cache.vars = NULL, cache.lazy = TRUE, dependson = NULL, 
+        autodep = FALSE, cache.rebuild = FALSE, fig.keep = "high", 
+        fig.show = "asis", fig.align = "default", fig.path = "Tutorial301_files/figure-html/", 
         dev = "png", dev.args = NULL, dpi = 192, fig.ext = "png", 
         fig.width = 6.5, fig.height = 4, fig.env = "figure", 
         fig.cap = NULL, fig.scap = NULL, fig.lp = "fig:", fig.subcap = NULL, 
@@ -1051,8 +821,8 @@ learnr:::store_exercise_cache(structure(list(label = "p1", global_setup = struct
         message = TRUE, render = NULL, ref.label = NULL, child = NULL, 
         engine = "r", split = FALSE, include = TRUE, purl = TRUE, 
         max.print = 1000, exercise.warn_invisible = FALSE, label = "p1", 
-        exercise = TRUE, exercise.lines = 15, code = "", out.width.px = 624, 
-        out.height.px = 384, params.src = "p1, exercise=TRUE, exercise.lines = 15", 
+        exercise = TRUE, exercise.lines = 15, code = c("", ""
+        ), out.width.px = 624, out.height.px = 384, params.src = "p1, exercise=TRUE, exercise.lines = 15", 
         fig.num = 0L, exercise.df_print = "paged", exercise.checker = "NULL"), 
     engine = "r", version = "4"), class = c("r", "tutorial_exercise"
 )))
@@ -1070,27 +840,23 @@ output$`tutorial-exercise-p2-output` <- renderUI({
 learnr:::store_exercise_cache(structure(list(label = "p2", global_setup = structure(c("library(learnr)", 
 "library(paqueteMODELOS)", "library(boot)", "library(ggplot2)", 
 "library(gridExtra)", "library(knitr)", "library(broom)", "library(stargazer)", 
-"", "knitr::opts_chunk$set(echo = FALSE,", "                 exercise.warn_invisible = FALSE)", 
+"", "knitr::opts_chunk$set(echo = FALSE,", "exercise.warn_invisible = FALSE)", 
 "# colores", "c1=\"#FF7F00\" # NARANJA COLOR PRINCIPAL", "c2=\"#034a94\" # AZUL FUERTE COLOR SECUNDARIO  ", 
 "c3=\"#0eb0c6\" # AZUL CLARO COLOR TERCEARIO  ", "c4=\"#686868\" # GRIS COLOR TEXTO ", 
 "##  <div class=\"content-box-blue\">    <\u002fdiv> ## caja azul"
 ), chunk_opts = list(label = "setup", include = FALSE)), setup = NULL, 
-    chunks = list(list(label = "p2", code = "library(paqueteMODELOS)\ndata(vivienda)\n\n", 
-        opts = list(label = "\"p2\"", exercise = "TRUE", exercise.lines = "15"), 
+    chunks = list(list(label = "p2", code = "\n", opts = list(
+        label = "\"p2\"", exercise = "TRUE", exercise.lines = "15"), 
         engine = "r")), code_check = NULL, error_check = NULL, 
-    check = NULL, solution = structure(c("library(paqueteMODELOS)", 
-    "data(vivienda)", "vivienda$E4<-as.numeric(vivienda$estrato==4)  ", 
-    "vivienda$E5<-as.numeric(vivienda$estrato==5)  ", "vivienda$E6<-as.numeric(vivienda$estrato==6)  ", 
-    "modelo2=lm(preciom ~ parqueaderos + banios + habitaciones + tipo + E4 + E5 + E6, data=vivienda)", 
-    "summary(modelo2)"), chunk_opts = list(label = "p2-solution")), 
-    tests = NULL, options = list(eval = FALSE, echo = TRUE, results = "markup", 
-        tidy = FALSE, tidy.opts = NULL, collapse = FALSE, prompt = FALSE, 
-        comment = NA, highlight = FALSE, size = "normalsize", 
-        background = "#F7F7F7", strip.white = TRUE, cache = 0, 
-        cache.path = "Tutorial202_cache/html/", cache.vars = NULL, 
-        cache.lazy = TRUE, dependson = NULL, autodep = FALSE, 
-        cache.rebuild = FALSE, fig.keep = "high", fig.show = "asis", 
-        fig.align = "default", fig.path = "Tutorial202_files/figure-html/", 
+    check = NULL, solution = structure("", chunk_opts = list(
+        label = "p2-solution")), tests = NULL, options = list(
+        eval = FALSE, echo = TRUE, results = "markup", tidy = FALSE, 
+        tidy.opts = NULL, collapse = FALSE, prompt = FALSE, comment = NA, 
+        highlight = FALSE, size = "normalsize", background = "#F7F7F7", 
+        strip.white = TRUE, cache = 0, cache.path = "Tutorial301_cache/html/", 
+        cache.vars = NULL, cache.lazy = TRUE, dependson = NULL, 
+        autodep = FALSE, cache.rebuild = FALSE, fig.keep = "high", 
+        fig.show = "asis", fig.align = "default", fig.path = "Tutorial301_files/figure-html/", 
         dev = "png", dev.args = NULL, dpi = 192, fig.ext = "png", 
         fig.width = 6.5, fig.height = 4, fig.env = "figure", 
         fig.cap = NULL, fig.scap = NULL, fig.lp = "fig:", fig.subcap = NULL, 
@@ -1100,10 +866,9 @@ learnr:::store_exercise_cache(structure(list(label = "p2", global_setup = struct
         message = TRUE, render = NULL, ref.label = NULL, child = NULL, 
         engine = "r", split = FALSE, include = TRUE, purl = TRUE, 
         max.print = 1000, exercise.warn_invisible = FALSE, label = "p2", 
-        exercise = TRUE, exercise.lines = 15, code = c("library(paqueteMODELOS)", 
-        "data(vivienda)", "", ""), out.width.px = 624, out.height.px = 384, 
-        params.src = "p2, exercise=TRUE, exercise.lines = 15", 
-        fig.num = 0, exercise.df_print = "paged", exercise.checker = "NULL"), 
+        exercise = TRUE, exercise.lines = 15, code = c("", ""
+        ), out.width.px = 624, out.height.px = 384, params.src = "p2, exercise=TRUE, exercise.lines = 15", 
+        fig.num = 0L, exercise.df_print = "paged", exercise.checker = "NULL"), 
     engine = "r", version = "4"), class = c("r", "tutorial_exercise"
 )))
 </script>
@@ -1120,27 +885,23 @@ output$`tutorial-exercise-p3-output` <- renderUI({
 learnr:::store_exercise_cache(structure(list(label = "p3", global_setup = structure(c("library(learnr)", 
 "library(paqueteMODELOS)", "library(boot)", "library(ggplot2)", 
 "library(gridExtra)", "library(knitr)", "library(broom)", "library(stargazer)", 
-"", "knitr::opts_chunk$set(echo = FALSE,", "                 exercise.warn_invisible = FALSE)", 
+"", "knitr::opts_chunk$set(echo = FALSE,", "exercise.warn_invisible = FALSE)", 
 "# colores", "c1=\"#FF7F00\" # NARANJA COLOR PRINCIPAL", "c2=\"#034a94\" # AZUL FUERTE COLOR SECUNDARIO  ", 
 "c3=\"#0eb0c6\" # AZUL CLARO COLOR TERCEARIO  ", "c4=\"#686868\" # GRIS COLOR TEXTO ", 
 "##  <div class=\"content-box-blue\">    <\u002fdiv> ## caja azul"
 ), chunk_opts = list(label = "setup", include = FALSE)), setup = NULL, 
-    chunks = list(list(label = "p3", code = "library(paqueteMODELOS)\ndata(vivienda)\nvivienda <- na.omit(vivienda)\n", 
-        opts = list(label = "\"p3\"", exercise = "TRUE", exercise.lines = "15"), 
+    chunks = list(list(label = "p3", code = "\n", opts = list(
+        label = "\"p3\"", exercise = "TRUE", exercise.lines = "15"), 
         engine = "r")), code_check = NULL, error_check = NULL, 
-    check = NULL, solution = structure(c("library(paqueteMODELOS)", 
-    "data(vivienda)", "vivienda <- na.omit(vivienda)", "modelo_b0<- lm(preciom ~ 1, data=vivienda) # modelo y= b0", 
-    "modelo_all <- lm(preciom ~ parqueaderos + banios + habitaciones + tipo + estrato, data=vivienda) # modelo con todas las variables independientes", 
-    "forward <- step(modelo_b0, direction='forward', scope=formula(modelo_all), trace=0)", 
-    "summary(forward)"), chunk_opts = list(label = "p3-solution")), 
-    tests = NULL, options = list(eval = FALSE, echo = TRUE, results = "markup", 
-        tidy = FALSE, tidy.opts = NULL, collapse = FALSE, prompt = FALSE, 
-        comment = NA, highlight = FALSE, size = "normalsize", 
-        background = "#F7F7F7", strip.white = TRUE, cache = 0, 
-        cache.path = "Tutorial202_cache/html/", cache.vars = NULL, 
-        cache.lazy = TRUE, dependson = NULL, autodep = FALSE, 
-        cache.rebuild = FALSE, fig.keep = "high", fig.show = "asis", 
-        fig.align = "default", fig.path = "Tutorial202_files/figure-html/", 
+    check = NULL, solution = structure("", chunk_opts = list(
+        label = "p3-solution")), tests = NULL, options = list(
+        eval = FALSE, echo = TRUE, results = "markup", tidy = FALSE, 
+        tidy.opts = NULL, collapse = FALSE, prompt = FALSE, comment = NA, 
+        highlight = FALSE, size = "normalsize", background = "#F7F7F7", 
+        strip.white = TRUE, cache = 0, cache.path = "Tutorial301_cache/html/", 
+        cache.vars = NULL, cache.lazy = TRUE, dependson = NULL, 
+        autodep = FALSE, cache.rebuild = FALSE, fig.keep = "high", 
+        fig.show = "asis", fig.align = "default", fig.path = "Tutorial301_files/figure-html/", 
         dev = "png", dev.args = NULL, dpi = 192, fig.ext = "png", 
         fig.width = 6.5, fig.height = 4, fig.env = "figure", 
         fig.cap = NULL, fig.scap = NULL, fig.lp = "fig:", fig.subcap = NULL, 
@@ -1150,10 +911,9 @@ learnr:::store_exercise_cache(structure(list(label = "p3", global_setup = struct
         message = TRUE, render = NULL, ref.label = NULL, child = NULL, 
         engine = "r", split = FALSE, include = TRUE, purl = TRUE, 
         max.print = 1000, exercise.warn_invisible = FALSE, label = "p3", 
-        exercise = TRUE, exercise.lines = 15, code = c("library(paqueteMODELOS)", 
-        "data(vivienda)", "vivienda <- na.omit(vivienda)", ""
+        exercise = TRUE, exercise.lines = 15, code = c("", ""
         ), out.width.px = 624, out.height.px = 384, params.src = "p3, exercise=TRUE, exercise.lines = 15", 
-        fig.num = 0, exercise.df_print = "paged", exercise.checker = "NULL"), 
+        fig.num = 0L, exercise.df_print = "paged", exercise.checker = "NULL"), 
     engine = "r", version = "4"), class = c("r", "tutorial_exercise"
 )))
 </script>
@@ -1170,44 +930,23 @@ output$`tutorial-exercise-p4-output` <- renderUI({
 learnr:::store_exercise_cache(structure(list(label = "p4", global_setup = structure(c("library(learnr)", 
 "library(paqueteMODELOS)", "library(boot)", "library(ggplot2)", 
 "library(gridExtra)", "library(knitr)", "library(broom)", "library(stargazer)", 
-"", "knitr::opts_chunk$set(echo = FALSE,", "                 exercise.warn_invisible = FALSE)", 
+"", "knitr::opts_chunk$set(echo = FALSE,", "exercise.warn_invisible = FALSE)", 
 "# colores", "c1=\"#FF7F00\" # NARANJA COLOR PRINCIPAL", "c2=\"#034a94\" # AZUL FUERTE COLOR SECUNDARIO  ", 
 "c3=\"#0eb0c6\" # AZUL CLARO COLOR TERCEARIO  ", "c4=\"#686868\" # GRIS COLOR TEXTO ", 
 "##  <div class=\"content-box-blue\">    <\u002fdiv> ## caja azul"
 ), chunk_opts = list(label = "setup", include = FALSE)), setup = NULL, 
-    chunks = list(list(label = "p4", code = "library(paqueteMODELOS)\ndata(vivienda)\nvivienda <- na.omit(vivienda)\n", 
-        opts = list(label = "\"p4\"", exercise = "TRUE", exercise.lines = "25"), 
+    chunks = list(list(label = "p4", code = "\n", opts = list(
+        label = "\"p4\"", exercise = "TRUE", exercise.lines = "15"), 
         engine = "r")), code_check = NULL, error_check = NULL, 
-    check = NULL, solution = structure(c("library(paqueteMODELOS)", 
-    "library(boot)", "library(ggplot2)", "library(gridExtra)", 
-    "data(vivienda)", "vivienda <- na.omit(vivienda)", "modelo1=lm(preciom ~ parqueaderos + banios + habitaciones + tipo + estrato, data=vivienda)", 
-    "", "", "# Se define la función que devuelve los coeficientes de regresión", 
-    "fun_coeficientes <- function(data, index){", "  return(coef(lm(preciom ~ parqueaderos + banios + habitaciones , data = vivienda, subset = index)))", 
-    "}", "beta_0 <- rep(NA,9999)", "beta_1 <- rep(NA,9999)", 
-    "beta_2 <- rep(NA,9999)", "beta_3 <- rep(NA,9999)", "", "for(i in 1:9999) {", 
-    "  coeficientes <- fun_coeficientes(data = arboles1,", "                                   index = sample(1:90, 90, replace = TRUE))", 
-    "  beta_0[i] <- coeficientes[1]", "  beta_1[i] <- coeficientes[2]", 
-    "  beta_2[i] <- coeficientes[3]", "  beta_3[i] <- coeficientes[4]", 
-    "  }", "# Se grafica la distribución de los coeficientes", 
-    "p0 <- ggplot(data = data.frame(beta_0 = beta_0), aes(beta_0)) +", 
-    "  geom_histogram(colour = \"firebrick3\") + ", "  theme_bw()", 
-    "p1 <- ggplot(data = data.frame(beta_1 = beta_1), aes(beta_1)) +", 
-    "  geom_histogram(colour = \"firebrick3\") +", "  theme_bw()", 
-    "p2 <- ggplot(data = data.frame(beta_2 = beta_2), aes(beta_2)) +", 
-    "  geom_histogram(colour = \"firebrick3\") +", "  theme_bw()", 
-    "p3 <- ggplot(data = data.frame(beta_3 = beta_3), aes(beta_3)) +", 
-    "  geom_histogram(colour = \"firebrick3\") +", "  theme_bw()", 
-    "", "grid.arrange(p0,p1,p2, p3, ncol = 2, nrow=2,top = \"Bootstrap distribution de los coeficientes\")", 
-    "#  se calcula la media de los coeficientes estimados", "betas_boot=data.frame(beta_0,  beta_1,beta_2, beta_3)", 
-    "apply(betas_boot, 2,mean)"), chunk_opts = list(label = "p4-solution")), 
-    tests = NULL, options = list(eval = FALSE, echo = TRUE, results = "markup", 
-        tidy = FALSE, tidy.opts = NULL, collapse = FALSE, prompt = FALSE, 
-        comment = NA, highlight = FALSE, size = "normalsize", 
-        background = "#F7F7F7", strip.white = TRUE, cache = 0, 
-        cache.path = "Tutorial202_cache/html/", cache.vars = NULL, 
-        cache.lazy = TRUE, dependson = NULL, autodep = FALSE, 
-        cache.rebuild = FALSE, fig.keep = "high", fig.show = "asis", 
-        fig.align = "default", fig.path = "Tutorial202_files/figure-html/", 
+    check = NULL, solution = structure("", chunk_opts = list(
+        label = "p4-solution")), tests = NULL, options = list(
+        eval = FALSE, echo = TRUE, results = "markup", tidy = FALSE, 
+        tidy.opts = NULL, collapse = FALSE, prompt = FALSE, comment = NA, 
+        highlight = FALSE, size = "normalsize", background = "#F7F7F7", 
+        strip.white = TRUE, cache = 0, cache.path = "Tutorial301_cache/html/", 
+        cache.vars = NULL, cache.lazy = TRUE, dependson = NULL, 
+        autodep = FALSE, cache.rebuild = FALSE, fig.keep = "high", 
+        fig.show = "asis", fig.align = "default", fig.path = "Tutorial301_files/figure-html/", 
         dev = "png", dev.args = NULL, dpi = 192, fig.ext = "png", 
         fig.width = 6.5, fig.height = 4, fig.env = "figure", 
         fig.cap = NULL, fig.scap = NULL, fig.lp = "fig:", fig.subcap = NULL, 
@@ -1217,10 +956,9 @@ learnr:::store_exercise_cache(structure(list(label = "p4", global_setup = struct
         message = TRUE, render = NULL, ref.label = NULL, child = NULL, 
         engine = "r", split = FALSE, include = TRUE, purl = TRUE, 
         max.print = 1000, exercise.warn_invisible = FALSE, label = "p4", 
-        exercise = TRUE, exercise.lines = 25, code = c("library(paqueteMODELOS)", 
-        "data(vivienda)", "vivienda <- na.omit(vivienda)", ""
-        ), out.width.px = 624, out.height.px = 384, params.src = "p4, exercise=TRUE, exercise.lines = 25", 
-        fig.num = 0, exercise.df_print = "paged", exercise.checker = "NULL"), 
+        exercise = TRUE, exercise.lines = 15, code = c("", ""
+        ), out.width.px = 624, out.height.px = 384, params.src = "p4, exercise=TRUE, exercise.lines = 15", 
+        fig.num = 0L, exercise.df_print = "paged", exercise.checker = "NULL"), 
     engine = "r", version = "4"), class = c("r", "tutorial_exercise"
 )))
 </script>
@@ -1237,31 +975,23 @@ output$`tutorial-exercise-p5-output` <- renderUI({
 learnr:::store_exercise_cache(structure(list(label = "p5", global_setup = structure(c("library(learnr)", 
 "library(paqueteMODELOS)", "library(boot)", "library(ggplot2)", 
 "library(gridExtra)", "library(knitr)", "library(broom)", "library(stargazer)", 
-"", "knitr::opts_chunk$set(echo = FALSE,", "                 exercise.warn_invisible = FALSE)", 
+"", "knitr::opts_chunk$set(echo = FALSE,", "exercise.warn_invisible = FALSE)", 
 "# colores", "c1=\"#FF7F00\" # NARANJA COLOR PRINCIPAL", "c2=\"#034a94\" # AZUL FUERTE COLOR SECUNDARIO  ", 
 "c3=\"#0eb0c6\" # AZUL CLARO COLOR TERCEARIO  ", "c4=\"#686868\" # GRIS COLOR TEXTO ", 
 "##  <div class=\"content-box-blue\">    <\u002fdiv> ## caja azul"
 ), chunk_opts = list(label = "setup", include = FALSE)), setup = NULL, 
-    chunks = list(list(label = "p5", code = "library(paqueteMODELOS)\nlibrary(knitr)\nlibrary(stargazer)\ndata(vivienda)\nvivienda <- na.omit(vivienda)\n", 
-        opts = list(label = "\"p5\"", exercise = "TRUE", exercise.lines = "15"), 
+    chunks = list(list(label = "p5", code = "\n", opts = list(
+        label = "\"p5\"", exercise = "TRUE", exercise.lines = "15"), 
         engine = "r")), code_check = NULL, error_check = NULL, 
-    check = NULL, solution = structure(c("library(paqueteMODELOS)", 
-    "library(knitr)", "library(broom)", "library(stargazer)", 
-    "data(vivienda)", "vivienda <- na.omit(vivienda)", "modelo1<-lm(preciom ~ parqueaderos + banios +  tipo, data= vivienda)", 
-    "modelo2<-lm(preciom ~ parqueaderos + banios + tipo + estrato, data=vivienda)", 
-    "modelo3<-lm(preciom ~ parqueaderos + banios + habitaciones + tipo + estrato, data=vivienda)", 
-    "modelo4<-lm(preciom ~ parqueaderos + banios + habitaciones + areaconst + tipo + estrato, data=vivienda)", 
-    "#construcción de indicadores", "g1 <- glance(modelo1)", 
-    "g2 <- glance(modelo2)", "g3 <- glance(modelo3)", "g4 <- glance(modelo4)", 
-    "", "kable(rbind(g1, g2, g3, g4), digits = 2)", "", ""), chunk_opts = list(
+    check = NULL, solution = structure("", chunk_opts = list(
         label = "p5-solution")), tests = NULL, options = list(
         eval = FALSE, echo = TRUE, results = "markup", tidy = FALSE, 
         tidy.opts = NULL, collapse = FALSE, prompt = FALSE, comment = NA, 
         highlight = FALSE, size = "normalsize", background = "#F7F7F7", 
-        strip.white = TRUE, cache = 0, cache.path = "Tutorial202_cache/html/", 
+        strip.white = TRUE, cache = 0, cache.path = "Tutorial301_cache/html/", 
         cache.vars = NULL, cache.lazy = TRUE, dependson = NULL, 
         autodep = FALSE, cache.rebuild = FALSE, fig.keep = "high", 
-        fig.show = "asis", fig.align = "default", fig.path = "Tutorial202_files/figure-html/", 
+        fig.show = "asis", fig.align = "default", fig.path = "Tutorial301_files/figure-html/", 
         dev = "png", dev.args = NULL, dpi = 192, fig.ext = "png", 
         fig.width = 6.5, fig.height = 4, fig.env = "figure", 
         fig.cap = NULL, fig.scap = NULL, fig.lp = "fig:", fig.subcap = NULL, 
@@ -1271,11 +1001,9 @@ learnr:::store_exercise_cache(structure(list(label = "p5", global_setup = struct
         message = TRUE, render = NULL, ref.label = NULL, child = NULL, 
         engine = "r", split = FALSE, include = TRUE, purl = TRUE, 
         max.print = 1000, exercise.warn_invisible = FALSE, label = "p5", 
-        exercise = TRUE, exercise.lines = 15, code = c("library(paqueteMODELOS)", 
-        "library(knitr)", "library(stargazer)", "data(vivienda)", 
-        "vivienda <- na.omit(vivienda)", ""), out.width.px = 624, 
-        out.height.px = 384, params.src = "p5, exercise=TRUE, exercise.lines = 15", 
-        fig.num = 0, exercise.df_print = "paged", exercise.checker = "NULL"), 
+        exercise = TRUE, exercise.lines = 15, code = c("", ""
+        ), out.width.px = 624, out.height.px = 384, params.src = "p5, exercise=TRUE, exercise.lines = 15", 
+        fig.num = 0L, exercise.df_print = "paged", exercise.checker = "NULL"), 
     engine = "r", version = "4"), class = c("r", "tutorial_exercise"
 )))
 </script>
@@ -1302,8 +1030,8 @@ learnr:::store_exercise_cache(structure(list(label = "p5", global_setup = struct
 
 <!-- begin doc-metadata -->
 <div id="doc-metadata">
-<h1 class="title toc-ignore" style="display:none;"><strong>ESTIMACION DE
-MODELO DE REGRESIÓN LINEAL MULTIPLE</strong></h1>
+<h1 class="title toc-ignore" style="display:none;"><strong>MODELO LINEAL
+GENERAL</strong></h1>
 <h4 class="author"><em>Modelos Estadística para la toma de
 decisiones</em></h4>
 </div>
