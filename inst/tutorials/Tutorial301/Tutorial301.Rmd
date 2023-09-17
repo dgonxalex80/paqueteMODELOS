@@ -21,6 +21,13 @@ library(gridExtra)
 library(knitr)
 library(broom)
 library(stargazer)
+library(ROSE)
+library(tidyverse)
+data(corazon)
+data("train")
+data("test")
+data("train.blc")
+data("test.blc")
 
 knitr::opts_chunk$set(echo = FALSE,
 exercise.warn_invisible = FALSE)
@@ -389,48 +396,23 @@ test<-corazon[-index_train,]  # muestra de prueba
 
 Como el resultado del anterior proceso no corresponde a una base balanceada (proporciones iguales o similares de la variables respuesta (infarto) se propone realizar un balanceo de las bases utilizando para ello la función `ovun.sample` del paquete  `ROSE`
 
+<br/>
 
-```{r p3, exercise=TRUE, exercise.lines = 40}  
-library(paqueteMODELOS)
-data(corazon)
-table(corazon$infarto)
-# separacion de muetras
-ntrain <- nrow(corazon)*0.6
-ntest <- nrow(corazon)*0.4
+#### <span style="color:#FF7F00">**Nota**</span>
 
-set.seed(123)
-index_train<-sample(1:nrow(corazon),size = ntrain)
-train<-corazon[index_train,]  # muestra de entrenamiento
-test<-corazon[-index_train,]  # muestra de prueba
-
-```  
+Debido a problemas con la memoria cache donde se alojas los objetos, para los siguientes ejercicios se coloca la solución final para que sean corridas en los computadores personales.
 
 
-```{r p3-hint}  
+<pre>
 library(paqueteMODELOS)
 library(ROSE)
 data(corazon)
 table(corazon$infarto)
-# separacion de muetras
-ntrain <- nrow(corazon)*0.6
-ntest <- nrow(corazon)*0.4
+#-----------------------------
+library(learnr)
+load("data.RData")
+#------------------------------
 
-set.seed(123)
-index_train<-sample(1:nrow(corazon),size = ntrain)
-train<-corazon[index_train,]  # muestra de entrenamiento
-test<-corazon[-index_train,]  # muestra de prueba
-# oversampling
-train.blc <- ovun.sample()
-test.blc <- ovun.sample()
-
-```  
-
-
-```{r p3-solution}  
-library(paqueteMODELOS)
-library(ROSE)
-data(corazon)
-table(corazon$infarto)
 # separacion de muetras
 ntrain <- nrow(corazon)*0.6
 ntest <- nrow(corazon)*0.4
@@ -450,8 +432,8 @@ test.blc <- ovun.sample(infarto~., data=test,
                         method="over")$data
 table(train.blc$infarto)
 table(test.blc$infarto)
-```  
 
+</pre>
 
 
 ### **Problema 4**  
@@ -459,63 +441,8 @@ table(test.blc$infarto)
 A partir del resultado anterior tome la data train.blc y estime el modelo correspondiente 
 
 
-```{r p4, exercise=TRUE, exercise.lines = 40}  
-library(paqueteMODELOS)
-library(ROSE)
-data(corazon)
-table(corazon$infarto)
-# separacion de muetras
-ntrain <- nrow(corazon)*0.6
-ntest <- nrow(corazon)*0.4
+<pre>
 
-set.seed(123)
-index_train<-sample(1:nrow(corazon),size = ntrain)
-train<-corazon[index_train,]  # muestra de entrenamiento
-test<-corazon[-index_train,]  # muestra de prueba
-
-# oversampling
-train.blc <- ovun.sample(infarto~., data=train, 
-                         p=0.5, seed=1, 
-                         method="over")$data
-
-test.blc <- ovun.sample(infarto~., data=test, 
-                        p=0.5, seed=1, 
-                        method="over")$data
-
-
-```  
-
-
-```{r p4-hint}  
-library(paqueteMODELOS)
-library(ROSE)
-data(corazon)
-table(corazon$infarto)
-# separacion de muetras
-ntrain <- nrow(corazon)*0.6
-ntest <- nrow(corazon)*0.4
-
-set.seed(123)
-index_train<-sample(1:nrow(corazon),size = ntrain)
-train<-corazon[index_train,]  # muestra de entrenamiento
-test<-corazon[-index_train,]  # muestra de prueba
-
-# oversampling
-train.blc <- ovun.sample(infarto~., data=train, 
-                         p=0.5, seed=1, 
-                         method="over")$data
-
-test.blc <- ovun.sample(infarto~., data=test, 
-                        p=0.5, seed=1, 
-                        method="over")$data
-
-glm(    , family = binomial(link = "logit"), data = train.blc) -> modelo1
-
-
-```  
-
-
-```{r p4-solution}  
 library(paqueteMODELOS)
 library(ROSE)
 data(corazon)
@@ -538,76 +465,15 @@ test.blc <- ovun.sample(infarto~., data=test,
                         p=0.5, seed=1, 
                         method="over")$data
 glm(infarto ~ edad + angina + presion , family = binomial(link = "logit"), data = train.blc) -> modelo1
-```  
 
-
+</pre>
 
 ### **Problema 5**  
 
 Finalmete se requiere evaliar el modelo utilizando para ello la base test
 
+<pre>
 
-```{r p5, exercise=TRUE, exercise.lines = 50}  
-library(paqueteMODELOS)
-library(ROSE)
-data(corazon)
-table(corazon$infarto)
-# separacion de muetras
-ntrain <- nrow(corazon)*0.6
-ntest <- nrow(corazon)*0.4
-
-set.seed(123)
-index_train<-sample(1:nrow(corazon),size = ntrain)
-train<-corazon[index_train,]  # muestra de entrenamiento
-test<-corazon[-index_train,]  # muestra de prueba
-
-# oversampling
-train.blc <- ovun.sample(infarto~., data=train, 
-                         p=0.5, seed=1, 
-                         method="over")$data
-
-test.blc <- ovun.sample(infarto~., data=test, 
-                        p=0.5, seed=1, 
-                        method="over")$data
-glm(infarto ~ edad + angina + presion , family = binomial(link = "logit"), data = train.blc) -> modelo1
-
-```  
-
-
-```{r p5-hint}  
-library(paqueteMODELOS)
-library(ROSE)
-data(corazon)
-table(corazon$infarto)
-# separacion de muetras
-ntrain <- nrow(corazon)*0.6
-ntest <- nrow(corazon)*0.4
-
-set.seed(123)
-index_train<-sample(1:nrow(corazon),size = ntrain)
-train<-corazon[index_train,]  # muestra de entrenamiento
-test<-corazon[-index_train,]  # muestra de prueba
-
-# oversampling
-train.blc <- ovun.sample(infarto~., data=train, 
-                         p=0.5, seed=1, 
-                         method="over")$data
-
-test.blc <- ovun.sample(infarto~., data=test, 
-                        p=0.5, seed=1, 
-                        method="over")$data
-glm(infarto ~ edad + angina + presion , family = binomial(link = "logit"), data = train.blc) -> modelo1
-
-# matriz de confucion
-valor_pronosticado <- predict(modelo1,test.blc,type = "response")
-niveles_pronosticados <- ifelse(valor_pronosticado >0.5, "Si","No") %>%
-  factor(.)
-
-
-```  
-
-
-```{r p5-solution}  
 library(paqueteMODELOS)
 library(ROSE)
 data(corazon)
@@ -638,5 +504,5 @@ niveles_pronosticados <- ifelse(valor_pronosticado >0.5, "Si","No") %>%
   factor(.)
 
 confusionMatrix(niveles_pronosticados, test.blc$gana )
-```  
 
+</pre>
