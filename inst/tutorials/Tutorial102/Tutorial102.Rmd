@@ -146,7 +146,7 @@ question("¿Cuál de las siguientes afirmaciones sobre el análisis de clusterin
 correct = "Correcto!, (b) Es un método de aprendizaje no supervisado.",
 allow_retry = TRUE,
 answer("a) Requiere etiquetas previas para los datos.", message = "No...inténtalo de nuevo!"),
-answer("b) Es un método de aprendizaje supervisado.", correct = TRUE),
+answer("b) Es un método de aprendizaje no supervisado.", correct = TRUE),
 answer("c) Solo puede manejar variables numéricas.", message = "Incorrecto. Intenta de nuevo!"),
 answer("d) No se ve afectado por la elección de la métrica de distancia.", message = "No...inténtalo de nuevo!"),
 submit_button = "Enviar respuesta",
