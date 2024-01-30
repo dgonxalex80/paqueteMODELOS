@@ -1,9 +1,10 @@
 # **paquete0MODELOS**
 
 <br/>
-<center>
-<img src="data/Logo_paquete0MODELOS.png" alt=" " style="width:20%;">
-</center>
+
+<img src="inst/figures/Logo_paqueteMODELOS.png" alt=" " style="width:20%;">
+
+
 
 ## **Introducción**
 
