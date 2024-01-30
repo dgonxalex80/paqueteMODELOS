@@ -8,7 +8,7 @@
 
 ## **Introducción**
 
-El presente contiene elemetos de apoyo al curso 300MAE014 **Estadística Aplicada**
+El presente contiene elemetos de apoyo al curso **Modelos Estadística para la toma de decisiones**
 
 Contiene :
 
