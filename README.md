@@ -22,7 +22,7 @@ Contiene :
 ```
 install.packages("devtools")
 devtools::install_github("dgonxalex80/paqueteMODELOS")
-library(Foodprice)
+library(paqueteMODELOS)
 ```
 
 <br/><br/>
